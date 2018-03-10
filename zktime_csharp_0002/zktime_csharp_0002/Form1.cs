@@ -103,6 +103,7 @@ namespace zktime_csharp_0002
             //Console.Out.WriteLine("fp_OnCapture_None");
             lblMessage.Text += "->fp_OnCapture_None";
         }
+        static bool DBG_TPL = false;
         private void fp_OnCapture(bool ActionResult, object ATemplate)
         {
 
@@ -112,11 +113,17 @@ namespace zktime_csharp_0002
             {
 
 
+                string cp_format = "yyyy_MM_dd_HH_mm_ss";
+                string cp_pref = DateTime.Now.ToString(cp_format);
+
                 lblMessage.Text += "->fpoc_ActionResult# ";
                 bool ARegFeatureChanged = true;
                 string templates = fp.GetTemplateAsString();
+
+                if(DBG_TPL)
                 lblMessage.Text += "->"+templates+"# ";  
                 
+
                 string path = templateFilePath + "\\fingerprint.tpl";
                 
 
@@ -157,6 +164,8 @@ namespace zktime_csharp_0002
                             File.Create(jpgfn);
                         } 
                         bimage.Save(jpgfn);
+                        string cp_jpgfn = templateFilePath + "\\" + cp_pref + ".jpg";
+                        File.Copy(jpgfn, cp_jpgfn, true);
                         lblMessage.Text += "->saved# ";
                         
                     }
@@ -206,6 +215,12 @@ namespace zktime_csharp_0002
             }
         }
 
+        void debugRichText(string msg)
+        {
+            lblMessage.Text += "->"+msg+"# ";
+            lblMessage.ScrollToCaret();
+
+        }
         /// <summary>
         /// Enrolling the fingerprint.
         /// </summary>
@@ -213,9 +228,10 @@ namespace zktime_csharp_0002
         /// <param name="ATemplate"></param>
         private void fp_OnEnroll(bool ActionResult, object ATemplate)
         {
-            lblMessage.Text += "->fp_OnEnroll";
+            //lblMessage.Text += "->";
+            debugRichText("fp_OnEnroll");
             //fp.
-            if (ActionResult)
+            /*if (ActionResult)
             {
                 if (fp.LastQuality >= 80) //to ensure the fingerprint quality
                 {
@@ -231,7 +247,7 @@ namespace zktime_csharp_0002
             else
             {
                 //Register Failed
-            }
+            }*/
         }
 
         /// <summary>
@@ -285,6 +301,7 @@ namespace zktime_csharp_0002
         private void btnRegister_Click(object sender, EventArgs e)
         {
 
+            debugRichText("Registering ...");
             fp.BeginEnroll();
             //fp.OnEnroll += new IZKFPEngXEvents_OnEnrollEventHandler(fp_OnEnroll);
             //fp.OnImageReceived += new IZKFPEngXEvents_OnImageReceivedEventHandler(fp_OnImageReceived);
@@ -292,7 +309,11 @@ namespace zktime_csharp_0002
 
 
         private void btnIdentify1N_Click(object sender, EventArgs e)
+
+
         {
+
+            fp.CancelEnroll();
             bool ARegFeatureChanged = true;
             string regTemplate = File.ReadAllText(templateFilePath + "fingerprint.tpl");
             string verTemplate = fp.GetTemplateAsString();
