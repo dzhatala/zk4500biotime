@@ -41,7 +41,7 @@
             // 
             // btConnect
             // 
-            this.btConnect.Location = new System.Drawing.Point(48, 332);
+            this.btConnect.Location = new System.Drawing.Point(51, 408);
             this.btConnect.Name = "btConnect";
             this.btConnect.Size = new System.Drawing.Size(75, 23);
             this.btConnect.TabIndex = 0;
@@ -51,7 +51,7 @@
             // 
             // btnDisconnect
             // 
-            this.btnDisconnect.Location = new System.Drawing.Point(146, 390);
+            this.btnDisconnect.Location = new System.Drawing.Point(149, 466);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
             this.btnDisconnect.TabIndex = 1;
@@ -62,15 +62,15 @@
             // fingerPrintBox
             // 
             this.fingerPrintBox.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.fingerPrintBox.Location = new System.Drawing.Point(48, 64);
+            this.fingerPrintBox.Location = new System.Drawing.Point(-1, 12);
             this.fingerPrintBox.Name = "fingerPrintBox";
-            this.fingerPrintBox.Size = new System.Drawing.Size(233, 240);
+            this.fingerPrintBox.Size = new System.Drawing.Size(321, 366);
             this.fingerPrintBox.TabIndex = 5;
             this.fingerPrintBox.TabStop = false;
             // 
             // btnRegister
             // 
-            this.btnRegister.Location = new System.Drawing.Point(146, 332);
+            this.btnRegister.Location = new System.Drawing.Point(149, 408);
             this.btnRegister.Name = "btnRegister";
             this.btnRegister.Size = new System.Drawing.Size(75, 23);
             this.btnRegister.TabIndex = 6;
@@ -80,7 +80,7 @@
             // 
             // btnSaveImage
             // 
-            this.btnSaveImage.Location = new System.Drawing.Point(48, 361);
+            this.btnSaveImage.Location = new System.Drawing.Point(51, 437);
             this.btnSaveImage.Name = "btnSaveImage";
             this.btnSaveImage.Size = new System.Drawing.Size(75, 23);
             this.btnSaveImage.TabIndex = 7;
@@ -89,7 +89,7 @@
             // 
             // btnVerify1_1
             // 
-            this.btnVerify1_1.Location = new System.Drawing.Point(48, 390);
+            this.btnVerify1_1.Location = new System.Drawing.Point(51, 466);
             this.btnVerify1_1.Name = "btnVerify1_1";
             this.btnVerify1_1.Size = new System.Drawing.Size(75, 23);
             this.btnVerify1_1.TabIndex = 8;
@@ -98,7 +98,7 @@
             // 
             // btnVerify1_N
             // 
-            this.btnVerify1_N.Location = new System.Drawing.Point(146, 361);
+            this.btnVerify1_N.Location = new System.Drawing.Point(149, 437);
             this.btnVerify1_N.Name = "btnVerify1_N";
             this.btnVerify1_N.Size = new System.Drawing.Size(75, 23);
             this.btnVerify1_N.TabIndex = 9;
@@ -108,9 +108,9 @@
             // 
             // lblMessage
             // 
-            this.lblMessage.Location = new System.Drawing.Point(326, 41);
+            this.lblMessage.Location = new System.Drawing.Point(326, 12);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(231, 517);
+            this.lblMessage.Size = new System.Drawing.Size(231, 477);
             this.lblMessage.TabIndex = 10;
             this.lblMessage.Text = "";
             // 
@@ -118,7 +118,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(569, 570);
+            this.ClientSize = new System.Drawing.Size(569, 523);
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.btnVerify1_N);
             this.Controls.Add(this.btnVerify1_1);

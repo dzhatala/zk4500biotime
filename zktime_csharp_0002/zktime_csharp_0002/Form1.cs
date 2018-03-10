@@ -14,7 +14,7 @@ namespace zktime_csharp_0002
     public partial class mainForm : Form
     {
         ZKFPEngX fp = new ZKFPEngX();
-        string templateFilePath = "D:\\RESEARCHS\\fingerprint";
+        string templateFilePath = "D:\\RESEARCHS\\fingerprint\\downloaded";
 
         public mainForm()
         {
@@ -118,11 +118,13 @@ namespace zktime_csharp_0002
                 lblMessage.Text += "->"+templates+"# ";  
                 
                 string path = templateFilePath + "\\fingerprint.tpl";
-                if (!File.Exists(path))
-                {
-                    File.Create(path);
-                }
                 
+
+
+
+
+                //before save must exist before
+                // if not woring .. just restart applications ...
                 //File.WriteAllText(path, fp.GetTemplateAsStringEx("10.0"));
                 lblMessage.Text += "->writing " + templates.Length + "...# ";
                 File.WriteAllText(path, templates);
@@ -146,8 +148,17 @@ namespace zktime_csharp_0002
                     Bitmap bimage = ObjectToBitmap(ATemplate);
                     if (bimage != null)
                     {
-                        bimage.Save(templateFilePath + "\\test.jpg");
+                        //before save must exist before
+                        // if not woring .. just restart applications ...
+                        fingerPrintBox.Image = bimage;
+                        string jpgfn = templateFilePath + "\\test.jpg";
+                        if (!File.Exists(jpgfn))
+                        {
+                            File.Create(jpgfn);
+                        } 
+                        bimage.Save(jpgfn);
                         lblMessage.Text += "->saved# ";
+                        
                     }
                     else
                     {
