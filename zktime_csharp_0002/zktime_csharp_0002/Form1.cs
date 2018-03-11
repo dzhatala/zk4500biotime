@@ -13,7 +13,13 @@ namespace zktime_csharp_0002
 {
     public partial class mainForm : Form
     {
-        ZKFPEngX fp = new ZKFPEngX();
+
+        ZKFPEngX fp = null;
+        int fpcHandle = 0;
+        int MATCH_SCORE = 0;
+        int PROCESS_NUM = 1;
+        int FPID = 1; //first finger ID, should be increment
+        //ZKFPEngXControl fpc = new ZKFPEngXControl();
         string templateFilePath = "D:\\RESEARCHS\\fingerprint\\downloaded";
 
         public mainForm()
@@ -23,7 +29,7 @@ namespace zktime_csharp_0002
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            fp.EndEngine();
+            btnDisconnect_Click(null,null);
         }
 
        
@@ -31,28 +37,46 @@ namespace zktime_csharp_0002
 
         private void fp_OnImageReceived(ref bool AImageValid)
         {
-         
-         //var regTemplate = fp.GetTemplateAsString();
-            lblMessage.Text += " ->on image received"; 
+            debugRichText("fp_OnImageReceived");         
         }
 
         private void btConnect_Click(object sender, EventArgs e)
         {
 
+            if (fp == null) fp = new ZKFPEngX();
             fp.SensorIndex = 0;
             var rValue = fp.InitEngine();
 
+            
             if (rValue == 0)
             {
                 fp.SensorIndex = 0;
                 lblMessage.Text = "Sensor connected";
-                    //fp.OnCapture += new
-                     // IZKFPEngXEvents_OnCaptureEventHandler(fp_OnCapture_None);
-                    fp.OnCapture += new
-                    IZKFPEngXEvents_OnCaptureEventHandler(fp_OnCapture);
-              //fp.OnImageReceived += new
+                //fp.OnCapture += new
+                // IZKFPEngXEvents_OnCaptureEventHandler(fp_OnCapture_None);
+                //fp.reg
+                fp.OnCapture += new
+                IZKFPEngXEvents_OnCaptureEventHandler(fp_OnCapture);
 
+                //fp.OnImageReceived += new
                 //IZKFPEngXEvents_OnImageReceivedEventHandler(fp_OnImageReceived);
+                 
+                
+                btnDisconnect.Enabled = true;
+                btConnect.Enabled = false;
+
+                //fpcHandle = fp.CreateFPCacheDBEx();
+                fpcHandle = fp.CreateFPCacheDB();
+                if (fpcHandle <= 0)
+                {
+                    debugRichText("fpcHandle creation failed");
+                }
+                else
+                {
+                    debugRichText("fpcHandle creation success: "+fpcHandle);
+
+                }
+
 
             }
             else if (rValue == 1)
@@ -64,7 +88,7 @@ namespace zktime_csharp_0002
             else
                 lblMessage.Text += "";
 
-            //fp.
+
 
         }    
 
@@ -107,18 +131,21 @@ namespace zktime_csharp_0002
         private void fp_OnCapture(bool ActionResult, object ATemplate)
         {
 
-            lblMessage.Text += "->fp_OnCapture";
+            debugRichText("fp_OnCapture");
 
             if (ActionResult) //if fingerprint is captured successfully
             {
 
 
+                debugRichText("Q: "+fp.LastQuality);
+
                 string cp_format = "yyyy_MM_dd_HH_mm_ss";
                 string cp_pref = DateTime.Now.ToString(cp_format);
 
                 lblMessage.Text += "->fpoc_ActionResult# ";
-                bool ARegFeatureChanged = true;
-                string templates = fp.GetTemplateAsString();
+                //bool ARegFeatureChanged = true;
+                string templates = fp.GetTemplateAsStringEx("9");
+                string templates10 = fp.GetTemplateAsStringEx("10");
 
                 if(DBG_TPL)
                 lblMessage.Text += "->"+templates+"# ";  
@@ -151,7 +178,7 @@ namespace zktime_csharp_0002
                     
                     //Bitmap bimage = new Bitmap(templateFilePath+"\\fingerprint.bmp", true);
                     //object img = bimage as object;
-                    lblMessage.Text += "->saving bmp...# ";
+                    debugRichText( "saving bmp...");
                     Bitmap bimage = ObjectToBitmap(ATemplate);
                     if (bimage != null)
                     {
@@ -166,52 +193,83 @@ namespace zktime_csharp_0002
                         bimage.Save(jpgfn);
                         string cp_jpgfn = templateFilePath + "\\" + cp_pref + ".jpg";
                         File.Copy(jpgfn, cp_jpgfn, true);
-                        lblMessage.Text += "->saved# ";
-                        
+                        debugRichText( "saved");
+                        if (radioV1N.Checked)
+                        {
+                            match1N(fpcHandle, ATemplate, ref MATCH_SCORE, ref PROCESS_NUM);
+                        }
+                        else if(radioRegister.Checked)
+                        {
+
+                            if (fp.LastQuality >= 50)
+                            {
+                                if (radioThumb.Checked) FPID = 1;
+                                if (radioIndex.Checked) FPID = 2;
+                                
+                                registerFinger(fpcHandle, FPID, templates, templates10);
+                            }
+                        }
+
+
+
                     }
                     else
                     {
-                        lblMessage.Text += "->Not Saved null# ";
+                        debugRichText( "Not Saved null");
                     
                     }
                     
                 }
                 else
                 {
-                    lblMessage.Text += "->GFI false# ";
+                    debugRichText( "GFI false");
                 }
-                //var regsTemplatestr = ATemplate.ToString();
 
-                /*Bitmap bimage = new Bitmap("D:\test\fingerprint.bmp", true);
-                //object img = bimage as object;
-                if (fp.GetFingerImage(ref ATemplate) && fp.SensorIndex == 0)
-                {
-
-                    lblMessage.Text+="->saving bmp...# ";
-                    bimage = ObjectToBitmap(ATemplate);
-                    bimage.Save(templateFilePath + "test.bmp");
-                    fingerPrintBox.Image = bimage;
-                    bimage.Save("D:\test\test.jpg");
-                    lblMessage.Text += "-> jpg written# ";
-
-                }*/
-                /*
-                bool result = fp.VerFingerFromStr(ref regTemplate, verTemplate, true, ref ARegFeatureChanged);
-                if (result)
-                {
-                    //matched
-                    lblMessage.Text += "->Matched# ";
-                }
-                else
-                {
-                    //not matched
-                    lblMessage.Text += "->Not Matched# ";
-                }*/
+            
             }
             else
             {
                 //failed to capture a valid fingerprint
-                lblMessage.Text += "->failed to capture a valid fingerprint# ";
+                debugRichText( "failed to capture a valid fingerprint");
+            }
+        }
+
+        void registerFinger(int fpcHandle, int fpid, string sRegTemplate, string sRegTemplate10)
+        {
+
+            debugRichText("registerFinger " + "," + fpcHandle + "," + fpid + "," + sRegTemplate.Length + "," );
+            if (sRegTemplate10.Length > 0)
+            {
+                //var response = fp.AddRegTemplateStrToFPCacheDBEx(fpcHandle, fpid, sRegTemplate, sRegTemplate10);
+                var response = fp.AddRegTemplateStrToFPCacheDB(fpcHandle, fpid, sRegTemplate);
+                debugRichText("rF response: " + response);
+            }
+            else
+                debugRichText("Register 10.0 failed, template length is zero");
+
+        }
+
+        void match1N(int fpcHandle, object ATemplate, ref int Score, ref int ProcessNum)
+        {
+            debugRichText("match1N");
+            int id = -1;
+            int f = 0;
+            object A = null;
+            int S = 8;
+            int PN = 1;
+            id = fp.IdentificationInFPCacheDB(fpcHandle, ATemplate, ref Score, ref ProcessNum);
+            //var regsTemplatestr = ATemplate.ToString();
+            id = fp.IdentificationFromStrInFPCacheDB(fpcHandle, ATemplate.ToString(), ref Score, ref ProcessNum);
+            //id = fp.IdentificationInFPCacheDB(f, A, ref S, ref PN);
+            if (id == -1)
+            {
+                debugRichText("Identify Failed");
+            }
+            else
+            {
+                debugRichText("Identify Succeed ID = "+id+" Score = "+Score
+                    +"  Processed Number = "+ProcessNum);
+                //SetDlgItemText(IDC_EDTHINT, buffer);
             }
         }
 
@@ -228,9 +286,7 @@ namespace zktime_csharp_0002
         /// <param name="ATemplate"></param>
         private void fp_OnEnroll(bool ActionResult, object ATemplate)
         {
-            //lblMessage.Text += "->";
             debugRichText("fp_OnEnroll");
-            //fp.
             /*if (ActionResult)
             {
                 if (fp.LastQuality >= 80) //to ensure the fingerprint quality
@@ -287,28 +343,44 @@ namespace zktime_csharp_0002
         /// <param name="e"></param>
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
-            fp.SensorIndex = 2;
+            btConnect.Enabled = true;
+            if (fp == null) 
+                return; //already ..
+            if (fpcHandle > 0)
+            {
+                fp.FreeFPCacheDBEx(fpcHandle);
+            } 
+            //fp.SensorIndex = 2;
             fp.EndEngine();
+            
+            //fp.OnCapture = null;
+            fp = null;
             lblMessage.Text += "->Sensor disconnected.";
-
+            btnDisconnect.Enabled = false;
         }
 
+
+        IZKFPEngXEvents_OnEnrollEventHandler OE = null;
         /// <summary>
         /// To register the fingeprint.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnRegister_Click(object sender, EventArgs e)
+        /*private void btnRegister_Click(object sender, EventArgs e)
         {
 
             debugRichText("Registering ...");
             fp.BeginEnroll();
-            //fp.OnEnroll += new IZKFPEngXEvents_OnEnrollEventHandler(fp_OnEnroll);
+            if (OE == null)
+            {
+                OE=new IZKFPEngXEvents_OnEnrollEventHandler(fp_OnEnroll);
+                fp.OnEnroll += OE;
+            }
             //fp.OnImageReceived += new IZKFPEngXEvents_OnImageReceivedEventHandler(fp_OnImageReceived);
-        }
+        }*/
 
 
-        private void btnIdentify1N_Click(object sender, EventArgs e)
+/*        private void btnIdentify1N_Click(object sender, EventArgs e)
 
 
         {
@@ -327,10 +399,81 @@ namespace zktime_csharp_0002
             else
             {
                 //not matched
-                lblMessage.Text = "->Not Matched";
+           
+     lblMessage.Text = "->Not Matched";
             }
+        }*/
+
+        
+
+        private void btnBeep_Click(object sender, EventArgs e)
+        {
+            //fp.beep()
+            fp.ControlSensor(13, 1);
+            fp.ControlSensor(13, 0);
         }
 
+        private void btGreen_Click(object sender, EventArgs e)
+        {
+            //fp.beep()
+            fp.ControlSensor(11, 1);
+            fp.ControlSensor(11, 0);
+
+        }
+
+        private void btRed_Click(object sender, EventArgs e)
+        {
+            fp.ControlSensor(12, 1);
+            fp.ControlSensor(12, 0);
+
+        }
+
+        private void radioV1N_CheckedChanged(object sender, EventArgs e)
+        {
+            syncRadios();
+        }
+
+
+        private void syncRadios()
+        {
+            debugRichText("synchronize radios ...");
+            if (radioV1N.Checked|radioV1_1.Checked)
+            {
+                if (fp.IsRegister)
+                    fp.CancelEnroll();
+                //no need to start capture
+            }
+
+            
+            
+            //
+            if (radioRegister.Checked)
+            {
+                fp.CancelEnroll();
+                fp.EnrollCount=3;
+                fp.BeginEnroll();
+                if (OE == null)
+                {
+                    OE = new IZKFPEngXEvents_OnEnrollEventHandler(fp_OnEnroll);
+                    //@todo COMException 0x80040202 
+                    fp.OnEnroll += OE;
+                }
+
+            }
+
+            //debugRichText("Enroll count"+fp.);
+            
+        }
+
+        private void btRegister_CheckedChanged(object sender, EventArgs e)
+        {
+            syncRadios();
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            syncRadios();
+        }
        
 
     }
