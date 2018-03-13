@@ -153,6 +153,12 @@ void CDemoDlg::OnBTNInit()
 		SetDlgItemText(IDC_EDTCOUNT, m_Count);
 		SetDlgItemText(IDC_EDTSN, m_SN);		
 		MessageBox("Initial Succeed");
+
+		//test loading 
+		//@todo load master finger from here ....
+		//zkfpEng.
+
+
 	} 
 	else
 	{
@@ -287,6 +293,7 @@ void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempla
 {
 	VARIANT pTemplate;
 	char  buffer[64]={0};
+	char  buffermsg[128]={0};
 	
 	if (!ActionResult)
 		MessageBox("Register Failed");
@@ -304,24 +311,35 @@ void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempla
 			else
 				MessageBox("Register 10.0 failed, template length is zero");*/
 
-			if(sRegTemplate10.GetLength() > 0)
+
+			/*if(sRegTemplate10.GetLength() > 0){
 				zkfpEng.AddRegTemplateStrToFPCacheDB(fpcHandle, FPID, (LPCTSTR)sRegTemplate);
+			}
 			else
 				MessageBox("Register 10.0 failed, template length is zero");
+			*/
 
 			pTemplate = zkfpEng.DecodeTemplate1((LPCTSTR)sRegTemplate);
 
 			// Note: 10.0Template can not be compressed
 			zkfpEng.SetTemplateLen(&pTemplate, 602);
 			zkfpEng.SaveTemplate("fingerprint.tpl", pTemplate);
-			sprintf(buffer,"\\downloaded\\_%d.tpl",FPID);
+			sprintf(buffer,".\\downloaded\\TPL9_%d.tpl",FPID);
 			zkfpEng.SaveTemplate(buffer, pTemplate);
 			zkfpEng.SaveTemplate("double.tpl", pTemplate);
+
+			//register by file
+
+			long ret=zkfpEng.AddRegTemplateFileToFPCacheDB(fpcHandle, FPID, (LPCTSTR)buffer);
+			sprintf(buffermsg,"Adding db from %s for FPID=%d, return ret=%d",buffer,FPID,ret);
+			MessageBox(buffermsg);
+			
+
 			//zkfpEng.savetem
 			//zkfpEng.enco
 			FPID = FPID + 1;
 			UpdateData(TRUE);
-			MessageBox("Register Succeed");
+			//MessageBox("Register Succeed");
 		}
 		else
 		{

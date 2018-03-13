@@ -1,3 +1,8 @@
+3/13/2018 9:01:31 AM
+enroll --> str --> downloaded\fP_???.tlp --> from  file not to memory ok ...
+this is the first possibility to hibernate template into disk ...
+
+
 visual c++/studio 2008/vc9
 sdk 7-0
 ========================================================================
