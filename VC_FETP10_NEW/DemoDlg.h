@@ -110,6 +110,7 @@ public:
 	afx_msg void OnBnClickedbtnnext();
 	afx_msg void OnBnClickedbtnlast();
 	afx_msg void updateControls();
+	afx_msg void logONList(LPCSTR msg);
 
 };
 

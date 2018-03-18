@@ -135,11 +135,16 @@ HCURSOR CDemoDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
 }
+void CDemoDlg::logONList(LPCSTR msg){
+
+	SendDlgItemMessage(listLog_01,LB_ADDSTRING,0,(LPARAM)(msg));
+
+}
 
 void CDemoDlg::OnBTNInit() 
 {
 	char buffer[10] = {0};
-	
+	char buf_FN[64]={0},buf_FN10[64]={0};
 	if (zkfpEng.InitEngine() == 0)
 	{
 		EnableButton(true);
@@ -172,6 +177,7 @@ void CDemoDlg::OnBTNInit()
 		FPID++;
 		*/
 
+		/* 
 		FPID=1;
 		long ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
 			(LPCTSTR)".\\master\\TPL9_2.tpl",(LPCTSTR)".\\master\\TPL10_2.tpl");
@@ -187,6 +193,27 @@ void CDemoDlg::OnBTNInit()
 		FPID++;
 		ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
 			(LPCTSTR)".\\master\\TPL9_7.tpl",(LPCTSTR)".\\master\\TPL10_7.tpl");
+		*/
+
+		FPID=1;
+		long ret=1;
+		while(ret){
+			
+			try{
+			sprintf(buf_FN,".\\master\\TPL9_%d.tpl",FPID);
+			sprintf(buf_FN10,".\\master\\TPL10_%d.tpl",FPID);
+			int ret=1;
+			ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
+				(LPCTSTR)buf_FN,(LPCTSTR)buf_FN10);
+			FPID++;
+			}catch (std::exception &e){
+
+			}
+		}
+		char info[30]={0};
+		sprintf(info,"Templated loaded total: %d",(FPID-1));
+		SetDlgItemText(IDC_EDTHINT, info);		
+		logONList(info);
 
 
 	} 
@@ -197,6 +224,7 @@ void CDemoDlg::OnBTNInit()
 	}
 	matchType = 2;
 }
+
 
 
 BEGIN_EVENTSINK_MAP(CDemoDlg, CDialog)

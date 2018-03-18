@@ -1,7 +1,10 @@
 git add -u
 git commit -m "???"
 
+git checkout -- VC_FETP10_NEW
 
+
+must test sensor/mysql before commit
 
 3/14/2018 5:38:02 PM
 loading 5 finger verson 10 templates, from Release/master ok 
