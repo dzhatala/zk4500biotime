@@ -1,8 +1,9 @@
-#git add -u
-
 #commit all modified,new deleted automatically
-git commit -u -m "???"
+#use these two lines
+git add -u
+git commit  -m "???"
 
+#to retrieve/undo wrong
 git checkout -- VC_FETP10_NEW
 
 
