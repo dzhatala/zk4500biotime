@@ -1,5 +1,7 @@
-git add -u
-git commit -m "???"
+#git add -u
+
+#commit all modified,new deleted automatically
+git commit -u -m "???"
 
 git checkout -- VC_FETP10_NEW
 
