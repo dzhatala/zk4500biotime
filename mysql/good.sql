@@ -29,6 +29,13 @@ alter table FPINFO CHANGE FPINFO_ID FPINFO_ID int AUTO_increment;
  select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname 
 from fpinfo,mdl_user where fpinfo.person_id=mdl_user.id ;
 
+
+
 */
+
+/**
+select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname ,mdl_user.id
+from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id
+**/
  
  

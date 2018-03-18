@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CDemoDlg, CDialog)
 	ON_BN_CLICKED(btnPrev, &CDemoDlg::OnBnClickedbtnprev)
 	ON_BN_CLICKED(btnNext, &CDemoDlg::OnBnClickedbtnnext)
 	ON_BN_CLICKED(btnLast, &CDemoDlg::OnBnClickedbtnlast)
+	ON_BN_CLICKED(btnUpdate, &CDemoDlg::OnBnClickedbtnupdate)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -243,7 +244,7 @@ void CDemoDlg::OnOnImageReceivedZkfpengx2(BOOL FAR* AImageValid)
 
 	hdc = this->GetDC()->m_hDC;
 
-	zkfpEng.PrintImageAt(long(hdc), 330, 2, zkfpEng.get_ImageWidth(), zkfpEng.get_ImageHeight());
+	zkfpEng.PrintImageAt(long(hdc), 400, 2, zkfpEng.get_ImageWidth(), zkfpEng.get_ImageHeight());
 }
 
 void CDemoDlg::OnBTNSave() 
@@ -343,8 +344,14 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 		else
 		{
 			sprintf(buffer, "Identify Succeed ID = %d Score = %d  Processed Number = %d", id, Score, ProcessNum);
+
 			SetDlgItemText(IDC_EDTHINT, buffer);
 		}
+			
+		char numbuf[10]={0};
+		sprintf(numbuf,"%d",id);
+		SetDlgItemText(editFPID, numbuf);
+
 	}   
 }
 
@@ -989,4 +996,12 @@ void CDemoDlg::OnBnClickedbtnlast()
 	// TODO: Add your control notification handler code here
 	mysql_last();
 	updateControls();
+}
+
+void CDemoDlg::OnBnClickedbtnupdate()
+{
+	// TODO: Add your control notification handler code here
+	int person_id,FPID,finger;
+
+	mysql_updateFinger(person_id,FPID,finger);
 }

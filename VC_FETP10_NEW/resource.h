@@ -30,6 +30,7 @@
 #define IDC_EDIT_Block                  1029
 #define IDC_EDIT_WriteBlock             1030
 #define IDC_EDIT3                       1031
+#define editFPID                        1031
 #define IDC_BUTTON5                     1032
 #define IDC_BTNWRITETMP                 1032
 #define IDC_EDIT_FINGERPIN              1034
@@ -55,8 +56,11 @@
 #define IDC_EDIT2                       1065
 #define editInfo                        1065
 #define IDC_COMBO1                      1066
+#define comboLeft                       1066
 #define IDC_COMBO2                      1067
+#define comboRight                      1067
 #define checkUpdateMySQL                1068
+#define btnUpdate                       1069
 
 // Next default values for new objects
 // 
@@ -64,7 +68,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1069
+#define _APS_NEXT_CONTROL_VALUE         1070
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -127,16 +127,16 @@ BEGIN
     PUSHBUTTON      ">>",btnLast,514,259,26,14
     EDITTEXT        editSearch,432,237,71,14,ES_AUTOHSCROLL
     PUSHBUTTON      "Search",btnSearch,507,236,33,14
-    EDITTEXT        editInfo,275,196,146,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT3,228,196,40,14,ES_AUTOHSCROLL
-    COMBOBOX        IDC_COMBO1,428,196,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_COMBO2,489,197,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "UpdateMysql",checkUpdateMySQL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,223,170,57,10
-    LTEXT           "FPID",IDC_STATIC,230,184,16,8
-    LTEXT           "Person Information",IDC_STATIC,281,182,61,8
-    LTEXT           "Left",IDC_STATIC,440,183,12,8
-    LTEXT           "Right",IDC_STATIC,498,180,18,8
+    EDITTEXT        editInfo,230,193,146,14,ES_AUTOHSCROLL
+    EDITTEXT        editFPID,384,196,40,14,ES_AUTOHSCROLL
+    COMBOBOX        comboLeft,428,196,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        comboRight,489,197,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "FPID",IDC_STATIC,394,181,16,8
+    LTEXT           "Person Information",IDC_STATIC,231,179,61,8
+    LTEXT           "Left",IDC_STATIC,443,180,12,8
+    LTEXT           "Right",IDC_STATIC,499,181,18,8
     LTEXT           "Static",IDC_STATIC,307,76,18,8
+    PUSHBUTTON      "Update MySQL",btnUpdate,457,213,50,14
 END
 
 
@@ -214,6 +214,26 @@ BEGIN
 0x4610, 0x726f, 0x6563, 0x6553, 0x6f63, 0x646e, 0x614d, 0x6374, 0x0868, 
 0x410c, 0x7475, 0x496f, 0x6564, 0x746e, 0x6669, 0x0879, 0x490d, 0x4973, 
 0x616d, 0x6567, 0x6843, 0x6e61, 0x6567, 0x0008, "\000" 
+    comboLeft, 0x403, 8, 0
+0x3a31, 0x6950, 0x6b6e, 0x0079, 
+    comboLeft, 0x403, 7, 0
+0x3a32, 0x6952, 0x676e, "\000" 
+    comboLeft, 0x403, 9, 0
+0x3a33, 0x694d, 0x6464, 0x656c, "\000" 
+    comboLeft, 0x403, 8, 0
+0x3a34, 0x6e49, 0x6564, 0x0078, 
+    comboLeft, 0x403, 8, 0
+0x3a35, 0x6854, 0x6d75, 0x0062, 
+    comboRight, 0x403, 8, 0
+0x3a31, 0x6854, 0x6d75, 0x0062, 
+    comboRight, 0x403, 8, 0
+0x3a32, 0x6e49, 0x6564, 0x0078, 
+    comboRight, 0x403, 9, 0
+0x3a33, 0x694d, 0x6464, 0x656c, "\000" 
+    comboRight, 0x403, 7, 0
+0x3a34, 0x6952, 0x676e, "\000" 
+    comboRight, 0x403, 9, 0
+0x353a, 0x503a, 0x6e69, 0x796b, "\000" 
     0
 END
 

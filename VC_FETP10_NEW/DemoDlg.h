@@ -112,6 +112,7 @@ public:
 	afx_msg void updateControls();
 	afx_msg void logONList(LPCSTR msg);
 
+	afx_msg void OnBnClickedbtnupdate();
 };
 
 //{{AFX_INSERT_LOCATION}}

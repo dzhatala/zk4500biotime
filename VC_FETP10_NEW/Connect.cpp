@@ -60,7 +60,7 @@ int connectTest(int logAFXID,int listLogID){
         connection = driver->connect(server, username, password);
         statement = connection->createStatement();
         statement->execute("USE moodle");
-        resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname  from fpinfo,mdl_user where fpinfo.person_id=mdl_user.id");
+        resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id");
 		rscount = resultSet->rowsCount();
 		resultSet->first();
 		//resultSet->
@@ -84,6 +84,27 @@ int connectTest(int logAFXID,int listLogID){
 
     //system("pause");*/
     return 0;
+}
+/***
+	return 0 on failed 
+*/
+int mysql_updateFinger(int person_id,int FPID,int finger){
+
+	logList(CH_LOG_LIST_ID,"mysql_updateFinger");
+	if(connection){
+		/* find if exist, the update
+			otherwise add new on FPINFO table
+		*/
+
+		//if(resultSet->find
+		
+		/*statement = connection->createStatement();
+		char sql[64]={0};
+		sprintf(sql,"select * from mdl_user where mdl_user.id=%d",person_id);
+		statement->executeQuery(sql);
+		*/
+	}
+	return 0;
 }
 
 
@@ -163,7 +184,7 @@ void getPersonInfo( char* buffer){
 	//char buffer[64]={0};
 	if(resultSet){
 		sql::SQLString  ss=resultSet->getString(13);
-		sprintf(buffer,"%s %s %s",ss->c_str(),resultSet->getString(14)->c_str(),resultSet->getString(15)->c_str(),resultSet->getString(16)->c_str());
+		sprintf(buffer,"%s %s %s %s",ss->c_str(),resultSet->getString(14)->c_str(),resultSet->getString(15)->c_str(),resultSet->getString(16)->c_str());
 	}
 
 
