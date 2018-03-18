@@ -998,10 +998,18 @@ void CDemoDlg::OnBnClickedbtnlast()
 	updateControls();
 }
 
+/*
+int findPerson_id(int person_id){
+	
+}
+*/
 void CDemoDlg::OnBnClickedbtnupdate()
 {
 	// TODO: Add your control notification handler code here
-	int person_id,FPID,finger;
+	int person_id,FPID;
 
-	mysql_updateFinger(person_id,FPID,finger);
+	//@todo, change...
+	person_id=1;FPID=5;
+	
+	mysql_updateFinger(person_id,FPID,"RIGHT_INDEX");
 }

@@ -88,7 +88,7 @@ int connectTest(int logAFXID,int listLogID){
 /***
 	return 0 on failed 
 */
-int mysql_updateFinger(int person_id,int FPID,int finger){
+int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 
 	logList(CH_LOG_LIST_ID,"mysql_updateFinger");
 	if(connection){
@@ -97,22 +97,59 @@ int mysql_updateFinger(int person_id,int FPID,int finger){
 		*/
 
 		//if(resultSet->find
-		
-		/*statement = connection->createStatement();
-		char sql[64]={0};
-		sprintf(sql,"select * from mdl_user where mdl_user.id=%d",person_id);
-		statement->executeQuery(sql);
-		*/
+		if(statement){
+			char sql[64]={0};
+
+			try{
+			
+				sprintf(sql,"select mdl_user.id from mdl_user where mdl_user.id=%d",person_id);
+				logList(CH_LOG_LIST_ID,sql);
+				
+				sql::ResultSet *restmp= statement->executeQuery(sql);
+				int rowc=restmp->rowsCount();
+				
+				delete restmp;
+				if(rowc<1){
+					logList(CH_LOG_LIST_ID,"cant find person id in db");
+					return -1;
+				}
+
+				sql[0]=0;/*emptying string .... */
+				sprintf(sql,"select person_id from fpinfo  WHERE person_id=%d",person_id);
+				logList(CH_LOG_LIST_ID,sql);
+				restmp= statement->executeQuery(sql);
+				rowc=restmp->rowsCount();
+
+				delete restmp;
+				
+				if(rowc<1){
+					logList(CH_LOG_LIST_ID,"Not Existed yet, adding new ... ");
+					sql[0]=0;/*emptying string .... */
+					//sprintf(sql,"update mdl_user set  where mdl_user.id=%d",person_id);
+					sprintf(sql,"insert into FPINFO (tperson_id,%s) values (%d, %d ) ",
+						finger_column,person_id,FPID);
+					logList(CH_LOG_LIST_ID,sql);
+					statement->executeUpdate(sql);
+				} else{
+					logList(CH_LOG_LIST_ID,"Existed, updating ....");
+
+					sql[0]=0;/*emptying string .... */
+					
+					sprintf(sql,"update FPINFO set  %s=%d where FPINFO.person_id=%d",finger_column,FPID, person_id);
+					logList(CH_LOG_LIST_ID,sql);
+					statement->executeUpdate(sql);
+					//statement->co
+				}
+
+			}catch (sql::SQLException &e){
+				SetDlgItemText(GetActiveWindow(),CH_LOG_AFX_ID,e.what());
+						MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
+
+			}
+		}
 	}
 	return 0;
 }
-
-
-
-
-
-
-
 
 void mysql_close(){
    //Clear resources

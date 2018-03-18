@@ -136,7 +136,7 @@ BEGIN
     LTEXT           "Left",IDC_STATIC,443,180,12,8
     LTEXT           "Right",IDC_STATIC,499,181,18,8
     LTEXT           "Static",IDC_STATIC,307,76,18,8
-    PUSHBUTTON      "Update MySQL",btnUpdate,457,213,50,14
+    PUSHBUTTON      "Update MySQL",btnUpdate,457,213,50,14,WS_DISABLED
 END
 
 

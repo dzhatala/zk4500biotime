@@ -18,6 +18,6 @@ void mysql_prev();
 void mysql_last();
 void mysql_first();
 void getPersonInfo(char* buffer);
-int mysql_updateFinger(int person_id,int FPID,int finger);
+int mysql_updateFinger(int person_id,int FPID,const char *finger);
 
 #endif
