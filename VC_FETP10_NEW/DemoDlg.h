@@ -105,6 +105,12 @@ public:
 	afx_msg void OnBnClickedBtnwritetmp();
 	afx_msg void OnBnClickedBtnreadtmp();
 	afx_msg void OnBnClickedbtnconnectmysql();
+	afx_msg void OnBnClickedbtnfirst();
+	afx_msg void OnBnClickedbtnprev();
+	afx_msg void OnBnClickedbtnnext();
+	afx_msg void OnBnClickedbtnlast();
+	afx_msg void updateControls();
+
 };
 
 //{{AFX_INSERT_LOCATION}}

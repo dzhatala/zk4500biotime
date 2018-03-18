@@ -1,3 +1,4 @@
+
 3/14/2018 5:38:02 PM
 loading 5 finger verson 10 templates, from Release/master ok 
 
@@ -10,7 +11,7 @@ this is the first possibility to hibernate template into disk ...
 
 
 visual c++/studio 2008/vc9
-sdk 7-0
+zk4500 sdk 7-0
 ========================================================================
        MICROSOFT FOUNDATION CLASS LIBRARY : Demo
 ========================================================================

@@ -157,6 +157,13 @@ void CDemoDlg::OnBTNInit()
 		//test loading 
 		//@todo load master finger from here ....
 		//zkfpEng.
+		FPID=1;
+		long ret=zkfpEng.AddRegTemplateFileToFPCacheDB(fpcHandle, FPID, (LPCTSTR)".\\master\\TPL9_02.tpl");
+		FPID++;
+		ret=zkfpEng.AddRegTemplateFileToFPCacheDB(fpcHandle, FPID, (LPCTSTR)".\\master\\TPL9_03.tpl");
+		FPID++;
+		ret=zkfpEng.AddRegTemplateFileToFPCacheDB(fpcHandle, FPID, (LPCTSTR)".\\master\\TPL9_05.tpl");
+		FPID++;
 
 
 	} 
@@ -201,6 +208,7 @@ void CDemoDlg::OnBTNReg()
 {
 	zkfpEng.CancelEnroll();
 	zkfpEng.put_EnrollCount(3);
+	//zkfpEng.put_EnrollCount(5);
 	zkfpEng.BeginEnroll();
 
 	SetDlgItemText(IDC_EDTHINT, "start register");		

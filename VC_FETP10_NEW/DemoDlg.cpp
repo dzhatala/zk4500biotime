@@ -70,6 +70,10 @@ BEGIN_MESSAGE_MAP(CDemoDlg, CDialog)
 	ON_BN_CLICKED(IDC_BTNWRITETMP, &CDemoDlg::OnBnClickedBtnwritetmp)
 	ON_BN_CLICKED(IDC_BTNREADTMP, &CDemoDlg::OnBnClickedBtnreadtmp)
 	ON_BN_CLICKED(btnConnectMySQL, &CDemoDlg::OnBnClickedbtnconnectmysql)
+	ON_BN_CLICKED(btnFirst, &CDemoDlg::OnBnClickedbtnfirst)
+	ON_BN_CLICKED(btnPrev, &CDemoDlg::OnBnClickedbtnprev)
+	ON_BN_CLICKED(btnNext, &CDemoDlg::OnBnClickedbtnnext)
+	ON_BN_CLICKED(btnLast, &CDemoDlg::OnBnClickedbtnlast)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -912,5 +916,49 @@ void CDemoDlg::OnBnClickedbtnconnectmysql()
 	SetDlgItemText(editLog_01,"Connect\r\nMyqsql");
 	//SetDlgItemText(
 	connectTest(editLog_01,listLog_01);
+	char buffer[64]={0};
+	sprintf(buffer,"Record count %d",rs_count());
+	//MessageBox(buffer);
+	logList(listLog_01,buffer);
+	OnBnClickedbtnfirst();
+}
 
+//update controls with data
+void CDemoDlg::updateControls(){
+	char buffer[64]={0};
+	//sprintf(buffer,"PERSONID %d",getPersonID());
+	SetDlgItemText(editInfo,buffer);
+	getPersonInfo(buffer);
+		logList(listLog_01,buffer);
+	SetDlgItemText(editInfo,buffer);
+	
+}
+
+void CDemoDlg::OnBnClickedbtnfirst()
+{
+	// TODO: Add your control notification handler code here
+	mysql_first();
+	updateControls();
+}
+
+
+void CDemoDlg::OnBnClickedbtnprev()
+{
+	// TODO: Add your control notification handler code here
+	mysql_prev();
+	updateControls();
+}
+
+void CDemoDlg::OnBnClickedbtnnext()
+{
+	// TODO: Add your control notification handler code here
+	mysql_next();
+	updateControls();
+}
+
+void CDemoDlg::OnBnClickedbtnlast()
+{
+	// TODO: Add your control notification handler code here
+	mysql_last();
+	updateControls();
 }

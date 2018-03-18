@@ -45,8 +45,18 @@
 #define IDC_RADIO10                     1054
 #define btnConnectMySQL                 1055
 #define editLog_01                      1056
-#define listLog                         1058
 #define listLog_01                      1058
+#define btnNext                         1059
+#define btnPrev                         1060
+#define btnFirst                        1061
+#define btnLast                         1062
+#define editSearch                      1063
+#define btnSearch                       1064
+#define IDC_EDIT2                       1065
+#define editInfo                        1065
+#define IDC_COMBO1                      1066
+#define IDC_COMBO2                      1067
+#define checkUpdateMySQL                1068
 
 // Next default values for new objects
 // 
@@ -54,7 +64,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1059
+#define _APS_NEXT_CONTROL_VALUE         1069
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
