@@ -53,6 +53,7 @@
 #define btnLast                         1062
 #define editSearch                      1063
 #define btnSearch                       1064
+#define btnSearchPerson                 1064
 #define IDC_EDIT2                       1065
 #define editInfo                        1065
 #define IDC_COMBO1                      1066
@@ -61,6 +62,7 @@
 #define comboRight                      1067
 #define checkUpdateMySQL                1068
 #define btnUpdate                       1069
+#define editMaxFPID                     1070
 
 // Next default values for new objects
 // 
@@ -68,7 +70,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1070
+#define _APS_NEXT_CONTROL_VALUE         1071
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

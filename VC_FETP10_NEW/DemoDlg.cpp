@@ -4,6 +4,7 @@
 #include "Demo.h"
 #include "DemoDlg.h"
 #include "Connect.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -75,6 +76,12 @@ BEGIN_MESSAGE_MAP(CDemoDlg, CDialog)
 	ON_BN_CLICKED(btnNext, &CDemoDlg::OnBnClickedbtnnext)
 	ON_BN_CLICKED(btnLast, &CDemoDlg::OnBnClickedbtnlast)
 	ON_BN_CLICKED(btnUpdate, &CDemoDlg::OnBnClickedbtnupdate)
+	ON_CBN_EDITCHANGE(comboRight, &CDemoDlg::OnCbnEditchangecomboright)
+	ON_CBN_EDITUPDATE(comboRight, &CDemoDlg::OnCbnEditupdatecomboright)
+	ON_CBN_SELCHANGE(comboRight, &CDemoDlg::OnCbnSelchangecomboright)
+	ON_CBN_SELCHANGE(comboLeft, &CDemoDlg::OnCbnSelchangecomboleft)
+	ON_CBN_SELENDOK(comboLeft, &CDemoDlg::OnCbnSelendokcomboleft)
+	ON_EN_CHANGE(editFPID, &CDemoDlg::OnEnChangeeditfpid)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -197,22 +204,42 @@ void CDemoDlg::OnBTNInit()
 		*/
 
 		FPID=1;
-		long ret=1;
-		while(ret){
+		long ret=1,totalFPID=0;
+		char info[30]={0};
+
+		int missingCount=0;
+		while(FPID<=100){
 			
 			try{
-			sprintf(buf_FN,".\\master\\TPL9_%d.tpl",FPID);
-			sprintf(buf_FN10,".\\master\\TPL10_%d.tpl",FPID);
-			int ret=1;
-			ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
-				(LPCTSTR)buf_FN,(LPCTSTR)buf_FN10);
-			FPID++;
-			}catch (std::exception &e){
+				sprintf(buf_FN,".\\master\\TPL9_%d.tpl",FPID);
+				sprintf(buf_FN10,".\\master\\TPL10_%d.tpl",FPID);
+				
+				if(PathFileExists(buf_FN)==FALSE||PathFileExists(buf_FN10)==FALSE){
+					missingCount++;
+				}
+				if(missingCount>3){
+					info[0]=0;
+					MessageBox("Stop before MAX templates because of \r\n3 consecutive missing files",
+						"Alert",MB_ICONERROR);
+					break;
 
+				}
+				if(PathFileExists(buf_FN)!=FALSE)
+					if(PathFileExists(buf_FN10)!=FALSE){
+
+						ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
+								(LPCTSTR)buf_FN,(LPCTSTR)buf_FN10);
+						totalFPID++;
+						FPID++;
+					}
+			}catch (std::exception &e){
+				MessageBox(e.what(),"Error",MB_ICONERROR);
+				OnBnClickedBtndisconnect();
+				return ;
 			}
 		}
-		char info[30]={0};
-		sprintf(info,"Templated loaded total: %d",(FPID-1));
+		info[0]=0;//reempty info
+		sprintf(info,"Templated loaded total: %d, next FPID=%d",totalFPID,FPID);
 		SetDlgItemText(IDC_EDTHINT, info);		
 		logONList(info);
 
@@ -1012,4 +1039,96 @@ void CDemoDlg::OnBnClickedbtnupdate()
 	person_id=1;FPID=5;
 	
 	mysql_updateFinger(person_id,FPID,"RIGHT_INDEX");
+}
+/**
+	may be we can update finger print data on mysql
+*/
+void CDemoDlg::EnableUpdate(){
+	char buffer[20]={0};
+	char infol[50]={0};
+	char infor[50]={0};
+	//logONList("EnableUpdate?");
+	//get combo selected index
+	int lcbr=SendDlgItemMessage(comboRight,CB_GETCURSEL,0,0);
+	if(lcbr!=CB_ERR){
+		//get combo selected text
+		SendDlgItemMessage(comboRight,CB_GETLBTEXT,(WPARAM)lcbr,(LPARAM)buffer);
+		sprintf(infol,"Right Combo %s, idx %d",buffer,lcbr);
+		logONList(infol);
+		//todo set left no NONE
+		//info+=strlen(info);
+	}
+
+	int lcbl=SendDlgItemMessage(comboLeft,CB_GETCURSEL,0,0);
+	buffer[0]=0;
+	if(lcbl!=CB_ERR){
+		SendDlgItemMessage(comboLeft,CB_GETLBTEXT,(WPARAM)lcbl,(LPARAM)buffer);
+		//CB_seti
+		sprintf(infor,", Left Combo %s idx %d",buffer,lcbl);
+		logONList(infor);
+
+		//TODO set righ to NONE
+	}
+	//FPID to be signed
+	int reqFPID=GetDlgItemInt(editFPID);
+	infor[0]=0;
+	if (reqFPID>0&&(lcbl>0||lcbr>0)){
+		sprintf(infor,", reqFPID %d",reqFPID);
+		logONList(infor);
+		//SetAbortProc//
+		GetDlgItem(btnUpdate)->EnableWindow(true);
+
+	}else {
+		GetDlgItem(btnUpdate)->EnableWindow(false);
+
+	}
+
+
+
+
+}
+void CDemoDlg::OnCbnEditchangecomboright()
+{
+	//EnableUpdate();
+	// TODO: Add your control notification handler code here
+}
+
+void CDemoDlg::OnCbnEditupdatecomboright()
+{
+	//EnableUpdate();// TODO: Add your control notification handler code here
+}
+
+void CDemoDlg::OnCbnSelchangecomboright()
+{
+	EnableUpdate();
+
+}
+
+void CDemoDlg::OnCbnSelchangecomboleft()
+{
+	// TODO: Add your control notification handler code here
+	EnableUpdate();
+	//CB_GETLBTEXT(
+}
+
+void CDemoDlg::OnCbnSelendokcomboleft()
+{
+	// TODO: Add your control notification handler code here
+	/*EnableUpdate();
+	CString cs;
+	GetDlgItemText(comboRight,cs);
+	//Getdlgitemtext
+	logONList(cs);
+	*/
+}
+
+void CDemoDlg::OnEnChangeeditfpid()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+	EnableUpdate();
 }

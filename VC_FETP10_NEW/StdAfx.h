@@ -28,3 +28,4 @@
 #endif // !defined(AFX_STDAFX_H__EB6FE9A8_9122_4EE5_A5CA_E7CF02453D8A__INCLUDED_)
 #include <afxdisp.h>
 #include <iostream>
+#include "Shlwapi.h"

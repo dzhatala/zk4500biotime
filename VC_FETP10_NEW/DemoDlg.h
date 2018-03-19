@@ -113,6 +113,13 @@ public:
 	afx_msg void logONList(LPCSTR msg);
 
 	afx_msg void OnBnClickedbtnupdate();
+	afx_msg void OnCbnEditchangecomboright();
+	afx_msg void CDemoDlg::EnableUpdate();
+	afx_msg void OnCbnEditupdatecomboright();
+	afx_msg void OnCbnSelchangecomboright();
+	afx_msg void OnCbnSelchangecomboleft();
+	afx_msg void OnCbnSelendokcomboleft();
+	afx_msg void OnEnChangeeditfpid();
 };
 
 //{{AFX_INSERT_LOCATION}}
