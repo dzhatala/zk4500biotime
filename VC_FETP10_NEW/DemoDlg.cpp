@@ -368,19 +368,23 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 		if (id == -1)
 		{
 			SetDlgItemText(IDC_EDTHINT, "Identify Failed");
+			OnBnClickedBtnred();
+			//OnBnClickedBtnbeep();
 		}
 		else
 		{
 			sprintf(buffer, "Identify Succeed ID = %d Score = %d  Processed Number = %d", id, Score, ProcessNum);
-
 			SetDlgItemText(IDC_EDTHINT, buffer);
+			OnBnClickedBtngreen();
+			SyncControlForIdentifiedFPID(id); //synch controls.. 
+
 		}
 		
 		/*** update FPID in text edit **/
 		char numbuf[10]={0};
 		sprintf(numbuf,"%d",id);
 		SetDlgItemText(editFPID, numbuf);
-		int person_id=findPersonWithFPID(id);
+		//int person_id=findPersonWithFPID(id);
 
 	}   
 }
@@ -979,6 +983,7 @@ void CDemoDlg::OnBnClickedBtnreadtmp()
 
 void CDemoDlg::OnBnClickedbtnconnectmysql()
 {
+	if(resultSet) return ;
 	// TODO: Add your control notification handler code here
 	SetDlgItemText(editLog_01,"Connect\r\nMyqsql");
 	//SetDlgItemText(
@@ -1149,11 +1154,20 @@ void CDemoDlg::OnCbnSelendokcomboleft()
 
 void CDemoDlg::OnEnChangeeditfpid()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialog::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
 	EnableUpdate();
+}
+
+
+void CDemoDlg::SyncControlForIdentifiedFPID(int reqFPID)
+{
+
+	char info[100]={0};
+	int person_id=findPersonWithFPID(reqFPID);
+	if(person_id>0){
+		sprintf(info," Find person %d for FPID %d",person_id,reqFPID);
+		logONList(info);
+		MoveToPersonWithPersonID(person_id);
+		updateControls();
+	}
+
 }

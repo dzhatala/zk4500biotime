@@ -238,24 +238,67 @@ int findPersonWithFPID(int FPID){
 
 			try{
 			sprintf(sql,
-				"select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id WHERE  "
-					,FPID);
-			resultSet = statement->executeQuery(sql);
-				logList(CH_LOG_LIST_ID,sql);
+				"select fpinfo.* from fpinfo WHERE LEFT_PINKY=%d OR LEFT_RING=%d OR LEFT_MIDDLE=%d OR LEFT_INDEX=%d OR LEFT_THUMB=%d OR RIGHT_THUMB=%d OR RIGHT_INDEX=%d OR RIGHT_MIDDLE=%d OR RIGHT_RING=%d OR RIGHT_PINKY=%d"
+					,FPID,FPID,FPID,FPID,FPID,FPID,FPID,FPID,FPID,FPID);
+			
+			
+			/*sprintf(sql,
+				"select fpinfo.* from fpinfo WHERE LEFT_PINKY=%d OR LEFT_THUMB=%d OR RIGHT_THUMB=%d "
+					,FPID,FPID,FPID);
+			*/
+			//logList(CH_LOG_LIST_ID,sql);
 				
 				sql::ResultSet *restmp= statement->executeQuery(sql);
 				int rowc=restmp->rowsCount();
 				
-				delete restmp;
 				if(rowc<1){
+					delete restmp;
 					logList(CH_LOG_LIST_ID,"cant find person id in db");
 					return -1;
 				}
+
+				restmp->first();
+				int ret=restmp->getInt(2); //this is not right join so its 2 not 17
+				delete restmp;
+				return ret;
 			}catch (sql::SQLException &e){
+				SetDlgItemText(GetActiveWindow(),CH_LOG_AFX_ID,e.what());
+						MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
 
 			}
 		}
 	}
 
 	return -1;
+}
+
+/***
+	move to person_id or move to last if not found
+***/
+void MoveToPersonWithPersonID(int person_id){
+
+		//logList(CH_LOG_LIST_ID,"moving...");
+		
+
+	if(resultSet){
+		resultSet->first();
+
+		while(true&&!resultSet->isLast()){
+
+			if(resultSet->getInt(PERSON_ID_COL_NUMBER)==person_id) {
+			//	logList(CH_LOG_LIST_ID,"move found ");
+				return ;
+			}
+
+			if(resultSet->isLast()) {
+				return ;
+			}
+			
+			//logList(CH_LOG_LIST_ID,"moving...");
+			resultSet->next();
+		}
+
+	}
+
+
 }

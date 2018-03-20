@@ -123,6 +123,7 @@ public:
 	afx_msg void OnCbnSelchangecomboleft();
 	afx_msg void OnCbnSelendokcomboleft();
 	afx_msg void OnEnChangeeditfpid();
+	afx_msg void SyncControlForIdentifiedFPID(int FPID);
 };
 
 //{{AFX_INSERT_LOCATION}}

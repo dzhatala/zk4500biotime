@@ -22,5 +22,6 @@ void mysql_first();
 void getPersonInfo(char* buffer);
 int mysql_updateFinger(int person_id,int FPID,const char *finger);
 int findPersonWithFPID(int FPID);
+void MoveToPersonWithPersonID(int FPID);
 
 #endif
