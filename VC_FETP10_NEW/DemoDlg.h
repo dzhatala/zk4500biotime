@@ -31,6 +31,9 @@ public:
 	CString sRegTemplate10;
 
 	BOOL bVerWithCard;
+	
+	char FINGER_POSITION[20]; // "RIGHT_INDEX",
+
 // Dialog Data
 	//{{AFX_DATA(CDemoDlg)
 	enum { IDD = IDD_DEMO_DIALOG };

@@ -60,7 +60,7 @@ int connectTest(int logAFXID,int listLogID){
         connection = driver->connect(server, username, password);
         statement = connection->createStatement();
         statement->execute("USE moodle");
-        resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id");
+        resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id order by mdl_user.username");
 		rscount = resultSet->rowsCount();
 		resultSet->first();
 		//resultSet->
@@ -126,10 +126,11 @@ int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 					logList(CH_LOG_LIST_ID,"Not Existed yet, adding new ... ");
 					sql[0]=0;/*emptying string .... */
 					//sprintf(sql,"update mdl_user set  where mdl_user.id=%d",person_id);
-					sprintf(sql,"insert into FPINFO (tperson_id,%s) values (%d, %d ) ",
+					sprintf(sql,"insert into FPINFO (person_id,%s) values (%d, %d ) ",
 						finger_column,person_id,FPID);
 					logList(CH_LOG_LIST_ID,sql);
 					statement->executeUpdate(sql);
+					return 1;
 				} else{
 					logList(CH_LOG_LIST_ID,"Existed, updating ....");
 
@@ -169,7 +170,7 @@ int rs_count(){
 
 int getPersonID(){
 	if(resultSet){
-		return resultSet->getInt(2);
+		return resultSet->getInt(PERSON_ID_COL_NUMBER);
 		//return resultSet->getString(13)->length();
 
 	}
@@ -225,4 +226,36 @@ void getPersonInfo( char* buffer){
 	}
 
 
+}
+
+/** return a person_id for a finger FPID ***/
+int findPersonWithFPID(int FPID){
+	
+	if(resultSet){
+		
+		if(statement){
+			char sql[300]={0};
+
+			try{
+			sprintf(sql,
+				"select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id WHERE  "
+					,FPID);
+			resultSet = statement->executeQuery(sql);
+				logList(CH_LOG_LIST_ID,sql);
+				
+				sql::ResultSet *restmp= statement->executeQuery(sql);
+				int rowc=restmp->rowsCount();
+				
+				delete restmp;
+				if(rowc<1){
+					logList(CH_LOG_LIST_ID,"cant find person id in db");
+					return -1;
+				}
+			}catch (sql::SQLException &e){
+
+			}
+		}
+	}
+
+	return -1;
 }

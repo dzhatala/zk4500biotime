@@ -27,6 +27,7 @@ CDemoDlg::CDemoDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	sRegTemplate = _T("");
 	sRegTemplate10 = _T("");
+	FINGER_POSITION[0]=0;
 }
 
 void CDemoDlg::DoDataExchange(CDataExchange* pDX)
@@ -374,13 +375,17 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 
 			SetDlgItemText(IDC_EDTHINT, buffer);
 		}
-			
+		
+		/*** update FPID in text edit **/
 		char numbuf[10]={0};
 		sprintf(numbuf,"%d",id);
 		SetDlgItemText(editFPID, numbuf);
+		int person_id=findPersonWithFPID(id);
 
 	}   
 }
+
+
 
 void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATemplate) 
 {
@@ -988,11 +993,11 @@ void CDemoDlg::OnBnClickedbtnconnectmysql()
 //update controls with data
 void CDemoDlg::updateControls(){
 	char buffer[64]={0};
-	//sprintf(buffer,"PERSONID %d",getPersonID());
 	SetDlgItemText(editInfo,buffer);
 	getPersonInfo(buffer);
-		logList(listLog_01,buffer);
+	logList(listLog_01,buffer);
 	SetDlgItemText(editInfo,buffer);
+	EnableUpdate();
 	
 }
 
@@ -1033,12 +1038,16 @@ int findPerson_id(int person_id){
 void CDemoDlg::OnBnClickedbtnupdate()
 {
 	// TODO: Add your control notification handler code here
-	int person_id,FPID;
-
-	//@todo, change...
-	person_id=1;FPID=5;
 	
-	mysql_updateFinger(person_id,FPID,"RIGHT_INDEX");
+	//@todo, change...
+	int person_id=getPersonID();
+	int reqFPID=GetDlgItemInt(editFPID);
+	char info[150]={0};
+	sprintf(info,"OnBnClickedbtnupdate reqFPID=%d, person_id=%d FPOS %s",reqFPID,person_id,FINGER_POSITION);
+	logONList(info);
+	char col_name[30]={0};
+	sprintf(col_name,FINGER_POSITION,19);
+	mysql_updateFinger(person_id,reqFPID,col_name);
 }
 /**
 	may be we can update finger print data on mysql
@@ -1056,25 +1065,42 @@ void CDemoDlg::EnableUpdate(){
 		sprintf(infol,"Right Combo %s, idx %d",buffer,lcbr);
 		logONList(infol);
 		//todo set left no NONE
+		//ComboBox_GetCurSel(comboRight);
 		//info+=strlen(info);
+	
+		if(lcbr!=0){
+			this->FINGER_POSITION[0]=0;
+			sprintf(this->FINGER_POSITION,buffer);
+			SendDlgItemMessage(comboLeft,CB_SETCURSEL,(WPARAM)0,(LPARAM)0);
+		}
 	}
 
 	int lcbl=SendDlgItemMessage(comboLeft,CB_GETCURSEL,0,0);
 	buffer[0]=0;
 	if(lcbl!=CB_ERR){
 		SendDlgItemMessage(comboLeft,CB_GETLBTEXT,(WPARAM)lcbl,(LPARAM)buffer);
-		//CB_seti
+		//this->FINGER_POSITION[0]=0;
+		//sprintf(this->FINGER_POSITION,buffer);
 		sprintf(infor,", Left Combo %s idx %d",buffer,lcbl);
 		logONList(infor);
 
-		//TODO set righ to NONE
+		if(lcbl!=0){
+			this->FINGER_POSITION[0]=0;
+			sprintf(this->FINGER_POSITION,buffer);
+			
+			//recursive ?
+			//SendDlgItemMessage(comboLeft,CB_SETCURSEL,(WPARAM)0,(LPARAM)0);
+			//
+		}
 	}
 	//FPID to be signed
 	int reqFPID=GetDlgItemInt(editFPID);
+	if(reqFPID<=0){
+		logONList("Warning: reqFPID <=0");
+	}
 	infor[0]=0;
-	if (reqFPID>0&&(lcbl>0||lcbr>0)){
-		sprintf(infor,", reqFPID %d",reqFPID);
-		logONList(infor);
+	int person_id=getPersonID();
+	if (reqFPID>0&&(lcbl>0||lcbr>0)&&person_id>0){
 		//SetAbortProc//
 		GetDlgItem(btnUpdate)->EnableWindow(true);
 
@@ -1082,9 +1108,8 @@ void CDemoDlg::EnableUpdate(){
 		GetDlgItem(btnUpdate)->EnableWindow(false);
 
 	}
-
-
-
+	sprintf(infor,", reqFPID %d, reqPersonID %d FPOS %s",reqFPID,person_id,FINGER_POSITION);
+	logONList(infor);
 
 }
 void CDemoDlg::OnCbnEditchangecomboright()

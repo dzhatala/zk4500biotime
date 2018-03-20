@@ -6,6 +6,10 @@ git commit  -m "???"
 #to retrieve/undo wrong
 git checkout -- VC_FETP10_NEW
 
+@todo, left to none if right ok ..
+@todo, set item to valid FPID
+
+
 
 must test sensor/mysql before commit
 
