@@ -106,6 +106,7 @@ BOOL CDemoDlg::OnInitDialog()
 	CheckRadioButton(IDC_RADIO9, IDC_RADIO10, IDC_RADIO9);
 	EnableButton(false);
 	
+	SetDlgItemText(editGo,"1");
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -983,7 +984,7 @@ void CDemoDlg::OnBnClickedBtnreadtmp()
 
 void CDemoDlg::OnBnClickedbtnconnectmysql()
 {
-	if(resultSet) return ;
+	//if(resultSet) return ;
 	// TODO: Add your control notification handler code here
 	SetDlgItemText(editLog_01,"Connect\r\nMyqsql");
 	//SetDlgItemText(
@@ -1024,14 +1025,19 @@ void CDemoDlg::OnBnClickedbtnprev()
 void CDemoDlg::OnBnClickedbtnnext()
 {
 	// TODO: Add your control notification handler code here
-	mysql_next();
+	int i,disp=GetDlgItemInt(editGo);
+	if(disp<=0) disp=1;
+	for (i=0; i<disp;i++)
+		mysql_next();
 	updateControls();
 }
 
 void CDemoDlg::OnBnClickedbtnlast()
 {
 	// TODO: Add your control notification handler code here
-	mysql_last();
+	int i,disp=GetDlgItemInt(editGo);
+	if(disp<=0) disp=1;
+		mysql_last();
 	updateControls();
 }
 

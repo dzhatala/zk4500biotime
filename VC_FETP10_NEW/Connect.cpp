@@ -22,10 +22,16 @@ string username = "root";
 string password = "123"; // 
 */
 
-string server   = "192.168.43.102";
+//string server   = "192.168.43.102";
+string server   = "192.168.1.234";
 string username = "joesmart";
 string password = "156354"; // 
 
+   sql::ResultSet  *resultSet=NULL;    // ResultSet to hold the results
+    sql::Driver     *driver; // MySQL Driver Object
+    sql::Connection *connection; // MySQL connection Object
+    sql::Statement  *statement;   // Statement which holds SQL commands
+   int CH_LOG_AFX_ID,CH_LOG_LIST_ID,rscount;
 
 void log(int editID,LPSTR msg){
 	HWND hwnd=GetActiveWindow();
@@ -38,12 +44,7 @@ void logList(int listID,LPCSTR msg){
 	LRESULT ret= SendDlgItemMessage(hwnd,listID,LB_ADDSTRING,0,(LPARAM)(msg));
 	_ASSERTE (ret!=LB_ERR);
 }
-    sql::ResultSet  *resultSet=NULL;    // ResultSet to hold the results
-    sql::Driver     *driver; // MySQL Driver Object
-    sql::Connection *connection; // MySQL connection Object
-    sql::Statement  *statement;   // Statement which holds SQL commands
-   int CH_LOG_AFX_ID,CH_LOG_LIST_ID,rscount;
-int connectTest(int logAFXID,int listLogID){
+ int connectTest(int logAFXID,int listLogID){
 
     //Here is the connection
     //cout << "Hello connect.cpp " ;
