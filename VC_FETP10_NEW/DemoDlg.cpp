@@ -28,6 +28,17 @@ CDemoDlg::CDemoDlg(CWnd* pParent /*=NULL*/)
 	sRegTemplate = _T("");
 	sRegTemplate10 = _T("");
 	FINGER_POSITION[0]=0;
+	
+	
+	//CFont *m_pFont=new CFont();
+	//m_pFont->CreateP(165,_T("Arial"));
+	//GetDlgItem(label1N)->SetFont(m_pFont,TRUE);
+	/*LOGFONT f={0};
+	Geth
+	f.lfHeight=-MulDiv(50,GetDeviceCaps(
+	m_pFont->GetLogFont(&f);
+	SendDlgItemMessage(labelStatic,WM_SETFONT,(WPARAM)&f,MAKELONG(TRUE,0));
+	*/
 }
 
 void CDemoDlg::DoDataExchange(CDataExchange* pDX)
@@ -103,7 +114,8 @@ BOOL CDemoDlg::OnInitDialog()
 	fpcHandle = 0;
 
 	CheckRadioButton(IDC_RADIOBMP, IDC_RADIOJPG, IDC_RADIOBMP);
-	CheckRadioButton(IDC_RADIO9, IDC_RADIO10, IDC_RADIO9);
+	//CheckRadioButton(IDC_RADIO9, IDC_RADIO10, IDC_RADIO9);
+	CheckRadioButton(IDC_RADIO9, IDC_RADIO10, IDC_RADIO10);
 	EnableButton(false);
 	
 	SetDlgItemText(editGo,"1");
@@ -210,7 +222,7 @@ void CDemoDlg::OnBTNInit()
 		char info[30]={0};
 
 		int missingCount=0;
-		while(FPID<=100){
+		while(FPID<=1000){
 			
 			try{
 				sprintf(buf_FN,".\\master\\TPL9_%d.tpl",FPID);
@@ -369,6 +381,7 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 		if (id == -1)
 		{
 			SetDlgItemText(IDC_EDTHINT, "Identify Failed");
+			SetDlgItemText(label1N, "1N Failed");
 			OnBnClickedBtnred();
 			//OnBnClickedBtnbeep();
 		}
@@ -385,7 +398,7 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 		char numbuf[10]={0};
 		sprintf(numbuf,"%d",id);
 		SetDlgItemText(editFPID, numbuf);
-		//int person_id=findPersonWithFPID(id);
+		mysql_logIdentified1N(id,Score,ProcessNum);
 
 	}   
 }
@@ -972,6 +985,7 @@ void CDemoDlg::OnBnClickedBtnreadtmp()
 			str.Format("Identify Succeed ID = %d Score = %d  Processed Number = %d", ret, Score, ProcessedFPNumber);
 			MessageBox(str);
 		}
+
 	}
 	else
 	{
@@ -1018,7 +1032,10 @@ void CDemoDlg::OnBnClickedbtnfirst()
 void CDemoDlg::OnBnClickedbtnprev()
 {
 	// TODO: Add your control notification handler code here
-	mysql_prev();
+	int i,disp=GetDlgItemInt(editGo);
+	if(disp<=0) disp=1;
+	for (i=0; i<disp;i++)
+		mysql_prev();
 	updateControls();
 }
 
@@ -1035,9 +1052,7 @@ void CDemoDlg::OnBnClickedbtnnext()
 void CDemoDlg::OnBnClickedbtnlast()
 {
 	// TODO: Add your control notification handler code here
-	int i,disp=GetDlgItemInt(editGo);
-	if(disp<=0) disp=1;
-		mysql_last();
+	mysql_last();
 	updateControls();
 }
 
@@ -1168,12 +1183,20 @@ void CDemoDlg::SyncControlForIdentifiedFPID(int reqFPID)
 {
 
 	char info[100]={0};
+	char info2[50]={0};
 	int person_id=findPersonWithFPID(reqFPID);
 	if(person_id>0){
 		sprintf(info," Find person %d for FPID %d",person_id,reqFPID);
 		logONList(info);
 		MoveToPersonWithPersonID(person_id);
+		getPersonInfo(info);
+		SetDlgItemText(label1N,info);
+		//getPersonInfo(info2);
+		//SetDlgItemText(labelIF2,info);
 		updateControls();
+	}else {
+		sprintf(info2,"%d NOTIN MYSQL",reqFPID);
+		SetDlgItemText(label1N,info2);
 	}
 
 }

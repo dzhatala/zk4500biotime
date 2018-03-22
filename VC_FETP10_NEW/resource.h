@@ -66,8 +66,11 @@
 #define IDC_EDIT1                       1071
 #define IDC_EDIT4                       1072
 #define IDC_EDIT5                       1073
-#define IDC_EDIT6                       1075
 #define editGo                          1075
+#define label1N                         1076
+#define labelIF2                        1077
+#define labelIF3                        1078
+#define labelIF4                        1079
 
 // Next default values for new objects
 // 
@@ -75,7 +78,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1076
+#define _APS_NEXT_CONTROL_VALUE         1080
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -303,3 +303,27 @@ void MoveToPersonWithPersonID(int person_id){
 
 
 }
+
+
+int mysql_logIdentified1N(int FPID,int SCORE, int PFN){
+
+	char info[40]={0};
+	sprintf(info,"logIdentified1N nto mysql");
+	logList(CH_LOG_LIST_ID,info);
+	if(statement){
+		char  sql [100]={0};
+		sprintf(sql,"insert IDENTIFIED1N (FPID, SCORE,PFN) values (%d, %d,%d ) ",
+						FPID,SCORE,PFN);
+		logList(CH_LOG_LIST_ID,sql);
+		try{
+			int ret=statement->executeUpdate(sql);
+			return ret;
+		}catch (sql::SQLException &e){
+				SetDlgItemText(GetActiveWindow(),CH_LOG_AFX_ID,e.what());
+						MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
+		}
+
+	}	
+	return -1;
+}
+
