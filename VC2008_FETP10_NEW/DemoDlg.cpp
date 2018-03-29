@@ -1020,18 +1020,30 @@ void CDemoDlg::OnBnClickedBtnreadtmp()
 	UpdateData(FALSE);
 }
 
-void CDemoDlg::OnBnClickedbtnconnectmysql()
-{
-	//if(resultSet) return ;
-	// TODO: Add your control notification handler code here
-	SetDlgItemText(editLog_01,"Connect\r\nMyqsql");
-	//SetDlgItemText(
+
+void pr1(void *param){
+	CDemoDlg *dlg=(CDemoDlg*)param;
+	if(dlg==NULL)return ;
+	dlg->logONList("New Thread for Connect .....");
+	//connectTest(editLog_01,listLog_01);
 	connectTest(editLog_01,listLog_01);
 	char buffer[64]={0};
 	sprintf(buffer,"Record count %d",rs_count());
-	//MessageBox(buffer);
 	logList(listLog_01,buffer);
-	OnBnClickedbtnfirst();
+	//dlg->logONList("test treahd");
+	dlg->OnBnClickedbtnfirst();
+
+}
+void CDemoDlg::OnBnClickedbtnconnectmysql()
+{
+	SetDlgItemText(editLog_01,"Connect\r\nMyqsql");
+	/*connectTest(editLog_01,listLog_01);
+	char buffer[64]={0};
+	sprintf(buffer,"Record count %d",rs_count());
+	logList(listLog_01,buffer);
+	OnBnClickedbtnfirst();*/
+	//_beginthread(CDemoDlg::ThreadedOnBnClickedbtnconnectmysql,0,NULL);
+	_beginthread(pr1,0,this);
 }
 
 //update controls with data

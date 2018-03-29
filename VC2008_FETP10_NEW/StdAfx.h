@@ -30,3 +30,4 @@
 #include <iostream>
 #include <ctime>
 #include "Shlwapi.h"
+#include <process.h>

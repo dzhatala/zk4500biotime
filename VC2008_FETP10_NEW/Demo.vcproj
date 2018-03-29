@@ -327,6 +327,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\password.h"
+				>
+			</File>
+			<File
 				RelativePath="Resource.h"
 				>
 			</File>

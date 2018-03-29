@@ -22,10 +22,12 @@ string username = "root";
 string password = "123"; // 
 */
 
-//string server   = "192.168.43.102";
-string server   = "192.168.1.234";
-string username = "joesmart";
-string password = "156354"; // 
+/*string server   = "192.168.43.102";
+//string server   = "192.168.1.234";
+string username = "xxxxxx";
+string password = "xxxxxx"; // 
+*/
+#include "password.h"
 
    sql::ResultSet  *resultSet=NULL;    // ResultSet to hold the results
     sql::Driver     *driver; // MySQL Driver Object

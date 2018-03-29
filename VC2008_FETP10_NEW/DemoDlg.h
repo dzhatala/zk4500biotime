@@ -126,6 +126,7 @@ public:
 	afx_msg void SyncControlForIdentifiedFPID(int FPID);
 	void CDemoDlg::backupFPImage(int FPID);
 
+
 };
 
 //{{AFX_INSERT_LOCATION}}
