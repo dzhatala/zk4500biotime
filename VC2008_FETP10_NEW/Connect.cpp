@@ -22,6 +22,8 @@ string username = "root";
 string password = "123"; // 
 */
 
+/*
+/**put these lines in password.h**/
 /*string server   = "192.168.43.102";
 //string server   = "192.168.1.234";
 string username = "xxxxxx";
