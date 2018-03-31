@@ -1,7 +1,9 @@
 #install
 create directory master,images, downloaded
 copy release\demo.exe release\master\*.tpl release\images\*.jpg
-
+make sure server and client have same modification time
+	@todo, insert images/???.jpg into mysql->IDENTIFIED1N
+	
 #commit all modified,new deleted automatically
 #use these two lines
 git add -u

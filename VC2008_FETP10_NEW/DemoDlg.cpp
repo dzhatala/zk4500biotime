@@ -298,10 +298,23 @@ void CDemoDlg::OnBTNSave()
 	MessageBox("Fingerprint Image saved");
 }
 
+
+char bckupsPath[50]={0};
+void threaded2(void *param){
+	CDemoDlg *dlg=(CDemoDlg*)param;
+	dlg->backupFPImageThr();
+	//const CZKFPEngX &zk=dlg->getZKEng();
+	//CZKFPEngX np=(*zk);
+	//&zk.SaveJPG(bckupsPath);
+		//_endthread();
+
+}
+void CDemoDlg::backupFPImageThr	(){
+	zkfpEng.SaveJPG(bckupsPath);
+}
 void CDemoDlg::backupFPImage(int FPID){
 
 
-	char sPath[50]={0};
 	char sTime[80]={0};
 	time_t rawtime;
 	struct tm *timeinfo;
@@ -311,8 +324,13 @@ void CDemoDlg::backupFPImage(int FPID){
 		time(&rawtime);
 		timeinfo=localtime(&rawtime);
 		strftime(sTime,sizeof(sTime),"%Y_%m_%d_%H_%M_%S",timeinfo);
-		sprintf(sPath,".\\images\\FPID_%d_%s.jpg",FPID,sTime);
-		zkfpEng.SaveJPG(sPath);
+		sprintf(bckupsPath,".\\images\\FPID_%d_%s.jpg",FPID,sTime);
+		
+		//
+		//zkfpEng.SaveJPG(sPath);
+		logONList(bckupsPath);
+		_beginthread(threaded2,0,this);
+
 		//logONList(sPath);
 	}
 	//	zkfpEng.SaveJPG("fingerprint.jpg");
@@ -1032,7 +1050,7 @@ void pr1(void *param){
 	logList(listLog_01,buffer);
 	//dlg->logONList("test treahd");
 	dlg->OnBnClickedbtnfirst();
-
+	_endthread();
 }
 void CDemoDlg::OnBnClickedbtnconnectmysql()
 {
@@ -1236,3 +1254,5 @@ void CDemoDlg::SyncControlForIdentifiedFPID(int reqFPID)
 	}
 
 }
+
+
