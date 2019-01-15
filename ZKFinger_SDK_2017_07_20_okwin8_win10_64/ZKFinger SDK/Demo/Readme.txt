@@ -1,0 +1,2 @@
+1. It can register and identify from fingerprint sensor. After registration succeed, obtained 9.0 and 10.0 fingerprint template. It also can control red/green light and beep.
+2. It can read and write data on ZK8000 Sensor.
