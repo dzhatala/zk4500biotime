@@ -39,6 +39,10 @@ CDemoDlg::CDemoDlg(CWnd* pParent /*=NULL*/)
 	m_pFont->GetLogFont(&f);
 	SendDlgItemMessage(labelStatic,WM_SETFONT,(WPARAM)&f,MAKELONG(TRUE,0));
 	*/
+	
+//	SendDlgItemMessage(comboLeft,CB_ADDSTRING,(WPARAM)0,(LPARAM)"INDEX");
+
+
 }
 
 void CDemoDlg::DoDataExchange(CDataExchange* pDX)

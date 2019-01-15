@@ -29,7 +29,7 @@ string password = "123"; //
 string username = "xxxxxx";
 string password = "xxxxxx"; // 
 */
-#include "password.h"
+#include "password.h" // not to be included if git .. ? missing in compilation 
 
    sql::ResultSet  *resultSet=NULL;    // ResultSet to hold the results
     sql::Driver     *driver; // MySQL Driver Object

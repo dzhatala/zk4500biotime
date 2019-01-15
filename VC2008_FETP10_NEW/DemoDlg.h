@@ -32,7 +32,7 @@ public:
 
 	BOOL bVerWithCard;
 	
-	char FINGER_POSITION[20]; // "RIGHT_INDEX",
+	char FINGER_POSITION[20]; // "RIGHT_INDEX","MIDDLE_INDEX","LEFT_INDEX"
 
 // Dialog Data
 	//{{AFX_DATA(CDemoDlg)
