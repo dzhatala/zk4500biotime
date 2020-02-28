@@ -64,6 +64,7 @@
 #define btnUpdate                       1069
 #define editMaxFPID                     1070
 #define IDC_EDIT1                       1071
+#define editRegName                     1071
 #define IDC_EDIT4                       1072
 #define IDC_EDIT5                       1073
 #define editGo                          1075

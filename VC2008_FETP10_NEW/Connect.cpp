@@ -64,7 +64,8 @@ void logList(int listID,LPCSTR msg){
 
         connection = driver->connect(server, username, password);
         statement = connection->createStatement();
-        statement->execute("USE moodle");
+        //statement->execute("USE moodle");
+        statement->execute("USE absensi");
         resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id order by mdl_user.username");
 		rscount = resultSet->rowsCount();
 		resultSet->first();
@@ -309,15 +310,15 @@ void MoveToPersonWithPersonID(int person_id){
 }
 
 
-int mysql_logIdentified1N(int FPID,int SCORE, int PFN){
+int mysql_logIdentified1N(int FPID,int SCORE, int PFN,const char* reg_name){
 
 	char info[40]={0};
 	sprintf(info,"logIdentified1N into mysql");
 	logList(CH_LOG_LIST_ID,info);
 	if(statement){
-		char  sql [100]={0};
-		sprintf(sql,"insert IDENTIFIED1N (FPID, SCORE,PFN) values (%d, %d,%d ) ",
-						FPID,SCORE,PFN);
+		char  sql [200]={0};
+		sprintf(sql,"insert IDENTIFIED1N (FPID, SCORE,PFN,REGNAME) values (%d, %d,%d, '%s' ) ",
+						FPID,SCORE,PFN,reg_name);
 		logList(CH_LOG_LIST_ID,sql);
 		try{
 			int ret=statement->executeUpdate(sql);

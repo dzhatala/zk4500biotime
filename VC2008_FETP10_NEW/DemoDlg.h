@@ -33,7 +33,7 @@ public:
 	BOOL bVerWithCard;
 	
 	char FINGER_POSITION[20]; // "RIGHT_INDEX","MIDDLE_INDEX","LEFT_INDEX"
-
+	char reg_event_name [30] ; //NOS_JOB1_IN
 // Dialog Data
 	//{{AFX_DATA(CDemoDlg)
 	enum { IDD = IDD_DEMO_DIALOG };
@@ -131,6 +131,7 @@ public:
 		return zkfpEng;
 	}*/
 	void backupFPImageThr();
+	afx_msg void OnEnUpdateeditregname();
 };
 
 //{{AFX_INSERT_LOCATION}}

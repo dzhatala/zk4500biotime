@@ -98,6 +98,7 @@ BEGIN_MESSAGE_MAP(CDemoDlg, CDialog)
 	ON_CBN_SELCHANGE(comboLeft, &CDemoDlg::OnCbnSelchangecomboleft)
 	ON_CBN_SELENDOK(comboLeft, &CDemoDlg::OnCbnSelendokcomboleft)
 	ON_EN_CHANGE(editFPID, &CDemoDlg::OnEnChangeeditfpid)
+	ON_EN_UPDATE(editRegName, &CDemoDlg::OnEnUpdateeditregname)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -124,6 +125,7 @@ BOOL CDemoDlg::OnInitDialog()
 	EnableButton(false);
 	
 	SetDlgItemText(editGo,"1");
+	SetDlgItemText(editRegName,"SUB?_JOB?_IN?OUT");
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -444,7 +446,7 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 		char numbuf[10]={0};
 		sprintf(numbuf,"%d",id);
 		SetDlgItemText(editFPID, numbuf);
-		mysql_logIdentified1N(id,Score,ProcessNum);
+		mysql_logIdentified1N(id,Score,ProcessNum,reg_event_name);
 		backupFPImage(id);
 	}   
 }
@@ -1042,6 +1044,21 @@ void CDemoDlg::OnBnClickedBtnreadtmp()
 	UpdateData(FALSE);
 }
 
+void update1(void *param){
+
+	CDemoDlg *dlg=(CDemoDlg*)param;
+	if(dlg==NULL)return ;
+	char buffer[64]={0},sb[32]={};
+	HWND handle=GetDlgItem(dlg->m_hWnd, editRegName);
+	int len = SendMessage(handle, WM_GETTEXTLENGTH, 0, 0);
+
+    SendMessage(handle, WM_GETTEXT, (WPARAM)len+1, (LPARAM)sb);
+	sprintf(buffer, "Even Reg: %s",sb);
+	sprintf(dlg->reg_event_name,sb);
+	/*dlg->logONList(dlg->reg_event_name); //test log action event name
+	*/
+
+}
 
 void pr1(void *param){
 	CDemoDlg *dlg=(CDemoDlg*)param;
@@ -1049,9 +1066,22 @@ void pr1(void *param){
 	dlg->logONList("New Thread for Connect .....");
 	//connectTest(editLog_01,listLog_01);
 	connectTest(editLog_01,listLog_01);
-	char buffer[64]={0};
-	sprintf(buffer,"Record count %d",rs_count());
-	logList(listLog_01,buffer);
+	
+	/*char buffer[64]={0},sb[32]={};
+	sprintf(buffer,"Record count 0%d",rs_count());
+	dlg->logONList(buffer);
+
+
+	HWND handle=GetDlgItem(dlg->m_hWnd, editRegName);
+	int len = SendMessage(handle, WM_GETTEXTLENGTH, 0, 0);
+
+    SendMessage(handle, WM_GETTEXT, (WPARAM)len+1, (LPARAM)sb);
+	sprintf(buffer, "Even Reg: %s",sb);
+	sprintf(dlg->reg_event_name,sb);
+	dlg->logONList(dlg->reg_event_name); //test log action event name
+	*/
+	update1(param);
+	dlg->logONList(dlg->reg_event_name);
 	//dlg->logONList("test treahd");
 	dlg->OnBnClickedbtnfirst();
 	_endthread();
@@ -1260,3 +1290,15 @@ void CDemoDlg::SyncControlForIdentifiedFPID(int reqFPID)
 }
 
 
+
+void CDemoDlg::OnEnUpdateeditregname()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function to send the EM_SETEVENTMASK message to the control
+	// with the ENM_UPDATE flag ORed into the lParam mask.
+
+	// TODO:  Add your control notification handler code here
+	update1(this);
+	
+}
