@@ -15,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 // CDemoDlg dialog
 
 CDemoDlg::CDemoDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CDemoDlg::IDD, pParent)
+: CDialog(CDemoDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDemoDlg)
 	m_Cur = _T("");
@@ -28,8 +28,8 @@ CDemoDlg::CDemoDlg(CWnd* pParent /*=NULL*/)
 	sRegTemplate = _T("");
 	sRegTemplate10 = _T("");
 	FINGER_POSITION[0]=0;
-	
-	
+
+
 	//CFont *m_pFont=new CFont();
 	//m_pFont->CreateP(165,_T("Arial"));
 	//GetDlgItem(label1N)->SetFont(m_pFont,TRUE);
@@ -39,8 +39,8 @@ CDemoDlg::CDemoDlg(CWnd* pParent /*=NULL*/)
 	m_pFont->GetLogFont(&f);
 	SendDlgItemMessage(labelStatic,WM_SETFONT,(WPARAM)&f,MAKELONG(TRUE,0));
 	*/
-	
-//	SendDlgItemMessage(comboLeft,CB_ADDSTRING,(WPARAM)0,(LPARAM)"INDEX");
+
+	//	SendDlgItemMessage(comboLeft,CB_ADDSTRING,(WPARAM)0,(LPARAM)"INDEX");
 
 
 }
@@ -112,7 +112,7 @@ BOOL CDemoDlg::OnInitDialog()
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
-	
+
 
 	bVerWithCard = false;
 	FPID = 1;
@@ -123,7 +123,7 @@ BOOL CDemoDlg::OnInitDialog()
 	CheckRadioButton(IDC_RADIO9, IDC_RADIO10, IDC_RADIO10);
 	CheckRadioButton(checkSaveImage, checkSaveImage, checkSaveImage);
 	EnableButton(false);
-	
+
 	SetDlgItemText(editGo,"1");
 	SetDlgItemText(editRegName,"SUB?_JOB?_IN?OUT");
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -196,7 +196,7 @@ void CDemoDlg::OnBTNInit()
 		//test loading 
 		//@todo load master finger from here ....
 		//zkfpEng.
-		
+
 		/*FPID=1;
 		long ret=zkfpEng.AddRegTemplateFileToFPCacheDB(fpcHandle, FPID, (LPCTSTR)".\\master\\TPL9_02.tpl");
 		FPID++;
@@ -209,19 +209,19 @@ void CDemoDlg::OnBTNInit()
 		/* 
 		FPID=1;
 		long ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
-			(LPCTSTR)".\\master\\TPL9_2.tpl",(LPCTSTR)".\\master\\TPL10_2.tpl");
+		(LPCTSTR)".\\master\\TPL9_2.tpl",(LPCTSTR)".\\master\\TPL10_2.tpl");
 		FPID++;
 		ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
-			(LPCTSTR)".\\master\\TPL9_4.tpl",(LPCTSTR)".\\master\\TPL10_4.tpl");
+		(LPCTSTR)".\\master\\TPL9_4.tpl",(LPCTSTR)".\\master\\TPL10_4.tpl");
 		FPID++;
 		ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
-			(LPCTSTR)".\\master\\TPL9_5.tpl",(LPCTSTR)".\\master\\TPL10_5.tpl");
+		(LPCTSTR)".\\master\\TPL9_5.tpl",(LPCTSTR)".\\master\\TPL10_5.tpl");
 		FPID++;
 		ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
-			(LPCTSTR)".\\master\\TPL9_6.tpl",(LPCTSTR)".\\master\\TPL10_6.tpl");
+		(LPCTSTR)".\\master\\TPL9_6.tpl",(LPCTSTR)".\\master\\TPL10_6.tpl");
 		FPID++;
 		ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
-			(LPCTSTR)".\\master\\TPL9_7.tpl",(LPCTSTR)".\\master\\TPL10_7.tpl");
+		(LPCTSTR)".\\master\\TPL9_7.tpl",(LPCTSTR)".\\master\\TPL10_7.tpl");
 		*/
 
 		FPID=1;
@@ -230,13 +230,18 @@ void CDemoDlg::OnBTNInit()
 
 		int missingCount=0;
 		while(FPID<=1000){
-			
+
 			try{
 				sprintf(buf_FN,".\\master\\TPL9_%d.tpl",FPID);
 				sprintf(buf_FN10,".\\master\\TPL10_%d.tpl",FPID);
-				
+
 				if(PathFileExists(buf_FN)==FALSE||PathFileExists(buf_FN10)==FALSE){
 					missingCount++;
+					logONList("missing");
+					logONList(buf_FN);
+				}else {
+					logONList(buf_FN);
+
 				}
 				if(missingCount>3){
 					info[0]=0;
@@ -249,7 +254,7 @@ void CDemoDlg::OnBTNInit()
 					if(PathFileExists(buf_FN10)!=FALSE){
 
 						ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, 
-								(LPCTSTR)buf_FN,(LPCTSTR)buf_FN10);
+							(LPCTSTR)buf_FN,(LPCTSTR)buf_FN10);
 						totalFPID++;
 						FPID++;
 					}
@@ -277,7 +282,7 @@ void CDemoDlg::OnBTNInit()
 
 
 BEGIN_EVENTSINK_MAP(CDemoDlg, CDialog)
-    //{{AFX_EVENTSINK_MAP(CDemoDlg)
+	//{{AFX_EVENTSINK_MAP(CDemoDlg)
 	ON_EVENT(CDemoDlg, IDC_ZKFPENGX2, 8 /* OnImageReceived */, OnOnImageReceivedZkfpengx2, VTS_PBOOL)
 	ON_EVENT(CDemoDlg, IDC_ZKFPENGX2, 10 /* OnCapture */, OnOnCaptureZkfpengx2, VTS_BOOL VTS_VARIANT)
 	ON_EVENT(CDemoDlg, IDC_ZKFPENGX2, 9 /* OnEnroll */, OnOnEnrollZkfpengx2, VTS_BOOL VTS_VARIANT)
@@ -312,7 +317,7 @@ void threaded2(void *param){
 	//const CZKFPEngX &zk=dlg->getZKEng();
 	//CZKFPEngX np=(*zk);
 	//&zk.SaveJPG(bckupsPath);
-		//_endthread();
+	//_endthread();
 
 }
 void CDemoDlg::backupFPImageThr	(){
@@ -331,7 +336,7 @@ void CDemoDlg::backupFPImage(int FPID){
 		timeinfo=localtime(&rawtime);
 		strftime(sTime,sizeof(sTime),"%Y_%m_%d_%H_%M_%S",timeinfo);
 		sprintf(bckupsPath,".\\images\\FPID_%d_%s.jpg",FPID,sTime);
-		
+
 		//
 		//zkfpEng.SaveJPG(sPath);
 		logONList(bckupsPath);
@@ -341,7 +346,7 @@ void CDemoDlg::backupFPImage(int FPID){
 	}
 	//	zkfpEng.SaveJPG("fingerprint.jpg");
 	//MessageBox("Fingerprint Image saved");
-	
+
 
 }
 
@@ -357,18 +362,18 @@ void CDemoDlg::OnBTNReg()
 
 void CDemoDlg::OnBTNIdentify() 
 {
-    if (zkfpEng.get_IsRegister())
-        zkfpEng.CancelEnroll();
+	if (zkfpEng.get_IsRegister())
+		zkfpEng.CancelEnroll();
 	SetDlgItemText(IDC_EDTHINT, "Identify(1:N)");		
-    matchType = 2;
+	matchType = 2;
 }
 
 void CDemoDlg::OnBTNVer() 
 {
-    if (zkfpEng.get_IsRegister())
-        zkfpEng.CancelEnroll();
+	if (zkfpEng.get_IsRegister())
+		zkfpEng.CancelEnroll();
 	SetDlgItemText(IDC_EDTHINT, "Verify(1:1)");		
-    matchType = 1;
+	matchType = 1;
 }
 
 BOOL CDemoDlg::DestroyWindow() 
@@ -382,7 +387,7 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 	char buffer[64] = {0};
 	CString sTemp;
 	BOOL RegChanged;
-	
+
 	if (matchType == 1)
 	{
 		if(bVerWithCard)
@@ -441,7 +446,7 @@ void CDemoDlg::OnOnCaptureZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempl
 			SyncControlForIdentifiedFPID(id); //synch controls.. 
 
 		}
-		
+
 		/*** update FPID in text edit **/
 		char numbuf[10]={0};
 		sprintf(numbuf,"%d",id);
@@ -459,7 +464,7 @@ void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempla
 	char  buffer[64]={0};
 	char  buffer10[64]={0};
 	char  buffermsg[128]={0};
-	
+
 	if (!ActionResult)
 		MessageBox("Register Failed");
 	else
@@ -472,16 +477,16 @@ void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempla
 		if(sRegTemplate.GetLength() > 0)
 		{
 			/*if(sRegTemplate10.GetLength() > 0)
-				zkfpEng.AddRegTemplateStrToFPCacheDBEx(fpcHandle, FPID, (LPCTSTR)sRegTemplate, (LPCTSTR)sRegTemplate10);
+			zkfpEng.AddRegTemplateStrToFPCacheDBEx(fpcHandle, FPID, (LPCTSTR)sRegTemplate, (LPCTSTR)sRegTemplate10);
 			else
-				MessageBox("Register 10.0 failed, template length is zero");*/
+			MessageBox("Register 10.0 failed, template length is zero");*/
 
 
 			/*if(sRegTemplate10.GetLength() > 0){
-				zkfpEng.AddRegTemplateStrToFPCacheDB(fpcHandle, FPID, (LPCTSTR)sRegTemplate);
+			zkfpEng.AddRegTemplateStrToFPCacheDB(fpcHandle, FPID, (LPCTSTR)sRegTemplate);
 			}
 			else
-				MessageBox("Register 10.0 failed, template length is zero");
+			MessageBox("Register 10.0 failed, template length is zero");
 			*/
 
 			pTemplate = zkfpEng.DecodeTemplate1((LPCTSTR)sRegTemplate);
@@ -491,11 +496,11 @@ void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempla
 			zkfpEng.SaveTemplate("fingerprint.tpl", pTemplate);
 			sprintf(buffer,".\\downloaded\\TPL9_%d.tpl",FPID);
 			zkfpEng.SaveTemplate(buffer, pTemplate);
-			
+
 			sprintf(buffer10,".\\downloaded\\TPL10_%d.tpl",FPID);
 			//no neeed to set length ? since v10 can't be compressed ....
 			zkfpEng.SaveTemplate(buffer10, pTemplate10);
-			
+
 			//zkfpEng.SaveTemplate("double.tpl", pTemplate);
 
 			//register by file
@@ -504,7 +509,7 @@ void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempla
 			long ret=zkfpEng.AddRegTemplateFileToFPCacheDBEx(fpcHandle, FPID, (LPCTSTR)buffer,(LPCTSTR)buffer10);
 			sprintf(buffermsg,"Adding db from %s %s  for FPID=%d, return ret=%d",buffer,buffer10,FPID,ret);
 			MessageBox(buffermsg);
-			
+
 
 			//zkfpEng.savetem
 			//zkfpEng.enco
@@ -516,7 +521,7 @@ void CDemoDlg::OnOnEnrollZkfpengx2(BOOL ActionResult, const VARIANT FAR& ATempla
 		{
 			MessageBox("Register Failed, template length is zero");
 		}
-  }
+	}
 }
 
 void CDemoDlg::OnOnFeatureInfoZkfpengx2(long AQuality) 
@@ -543,6 +548,46 @@ void CDemoDlg::OnDestroy()
 	CDialog::OnDestroy();
 }
 
+/*
+If download folder is not empty show warning !
+*/
+void CDemoDlg::CheckDownloadFolder(){
+
+
+	//const char *dir="F:\\rsync\\RESEARCHS\\fingerprint\\github_x240\\zk4500biotime\\VC2008_FETP10_NEW\\Release\\downloaded\\*.*";
+	int exist=0;
+	WIN32_FIND_DATA data;
+
+	char bfpath[1024],*cp;
+	//GetModuleFileName( NULL, bfpath, 1023 );
+	GetCurrentDirectory(1023, bfpath );
+	cp=bfpath+55;
+	logONList(cp);
+	sprintf(bfpath+strlen(bfpath),"\\downloaded\\*.*");
+	//logONList(bfpath);
+	logONList(cp);
+	HANDLE hFind = FindFirstFile(bfpath, &data);      // DIRECTORY
+	//HANDLE hFind = FindFirstFile("F:\\rsync\\RESEARCHS\\fingerprint\\github_x240\\zk4500biotime\\VC2008_FETP10_NEW\\Release\\downloaded\\*.*", &data);      // DIRECTORY
+	// HANDLE hFind = FindFirstFile("f:\\rsync\\*.*", &data);      // DIRECTORY
+
+	if ( hFind != INVALID_HANDLE_VALUE ) {
+		do {
+			//std::cout << data.cFileName << std::endl;
+			logONList(data.cFileName);
+			exist++;
+		} while (FindNextFile(hFind, &data));
+		FindClose(hFind);
+	}else {
+		MessageBox("Bad handle dir");
+	}
+	logONList("checkdonwloadvolder");
+	if(exist>2){ /**2 . and .. is not counted **/
+		sprintf(bfpath,"There is finger registered [%d] files? 'downloaded' folder not empty!",exist-2);
+		MessageBox(bfpath);
+	}
+	//MessageBox("Exit");
+}
+
 void CDemoDlg::OnClose() 
 {
 	zkfpEng.EndEngine();
@@ -551,6 +596,7 @@ void CDemoDlg::OnClose()
 		zkfpEng.FreeFPCacheDB(fpcHandle);
 		//zkfpEng.FreeFPCacheDBEx(fpcHandle);
 	}
+	CDemoDlg::CheckDownloadFolder();
 	CDialog::OnClose();
 }
 
@@ -603,7 +649,7 @@ int CDemoDlg::ReadBlock2(BYTE blockIndex, BYTE *pData, int blockLen)
 		}
 
 		memset(key, 0xFF, 6); // As 0xffffffffffff for keyA
-		
+
 		if(!zkfpEng.MF_PCDRead(0, 0, 0, index, blockNum, key, buf))
 			return buf[0];
 
@@ -637,7 +683,7 @@ int CDemoDlg::WriteBlock2(BYTE blkIndex, BYTE *pData, int blockLen)
 	int i = 0, index = 0, blockNum = 0;
 
 	index = blkIndex;
-	
+
 	buf = pData;
 
 	for(i = 0; i< blockLen;) 
@@ -691,8 +737,8 @@ void CDemoDlg::OnReadcard()
 	ret =  ReadBLOCK(Block, buf, key);
 	if(ret == 0)
 		str.Format("BLOCK=0x%02X, Data=0x %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X ",
-					Block, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7],
-					buf[8], buf[9], buf[10], buf[11], buf[12], buf[13], buf[14], buf[15]);
+		Block, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7],
+		buf[8], buf[9], buf[10], buf[11], buf[12], buf[13], buf[14], buf[15]);
 	else
 		str.Format("Errorcode=%X", ret);
 	SetDlgItemText(IDC_EDTHINT, "Read card:" + str);	
@@ -793,8 +839,8 @@ void CDemoDlg::OnBnClickedBtnreadpwd()
 	ret =  ReadBLOCK(1, buf, key);
 	if(ret == 0)
 		temp.Format("BLOCK = 0x%02X, Data=0x %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X ",
-				Block, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7],
-				buf[8], buf[9], buf[10], buf[11], buf[12], buf[13], buf[14], buf[15]);
+		Block, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7],
+		buf[8], buf[9], buf[10], buf[11], buf[12], buf[13], buf[14], buf[15]);
 	else
 		temp.Format("Errorcode=%X", ret);
 	SetDlgItemText(IDC_EDTHINT, "Read card:" + temp);
@@ -928,8 +974,8 @@ void CDemoDlg::OnBnClickedBtnwritetmp()
 
 	if(!(fp = fopen("fingerprint.tpl", "rb")) || !FPID)
 	{
-		 MessageBox("Please register finger first!");
-		 return;
+		MessageBox("Please register finger first!");
+		return;
 	}
 	fseek(fp, 0, SEEK_SET);
 	// A template is not more than 2000 Bytes
@@ -937,7 +983,7 @@ void CDemoDlg::OnBnClickedBtnwritetmp()
 	fclose(fp);	
 
 	// Content structure mark(2B)+TemplateSize(2B)+Template
- 
+
 	// mark
 	writeBuf[0] = 'Z'+16;
 	writeBuf[1] = 1;
@@ -980,7 +1026,7 @@ void CDemoDlg::OnBnClickedBtnreadtmp()
 	CString str;
 
 	UpdateData(TRUE);
-	
+
 	ret = ReadBlock2(0, readBuf, 608/16); // not more than 608 bytes
 
 	if(ret != 0)
@@ -999,11 +1045,11 @@ void CDemoDlg::OnBnClickedBtnreadtmp()
 
 	// Template size
 	dataLen = *((WORD *)&readBuf[2]);
-	
+
 	if(dataLen > 752-16)
 	{
-		 MessageBox("Fingertemplate abnormal, its length is larger than 752 bytes");
-		 return;
+		MessageBox("Fingertemplate abnormal, its length is larger than 752 bytes");
+		return;
 	}	
 	memcpy(buf, &readBuf[4], dataLen);
 
@@ -1052,7 +1098,7 @@ void update1(void *param){
 	HWND handle=GetDlgItem(dlg->m_hWnd, editRegName);
 	int len = SendMessage(handle, WM_GETTEXTLENGTH, 0, 0);
 
-    SendMessage(handle, WM_GETTEXT, (WPARAM)len+1, (LPARAM)sb);
+	SendMessage(handle, WM_GETTEXT, (WPARAM)len+1, (LPARAM)sb);
 	sprintf(buffer, "Even Reg: %s",sb);
 	sprintf(dlg->reg_event_name,sb);
 	/*dlg->logONList(dlg->reg_event_name); //test log action event name
@@ -1064,22 +1110,8 @@ void pr1(void *param){
 	CDemoDlg *dlg=(CDemoDlg*)param;
 	if(dlg==NULL)return ;
 	dlg->logONList("New Thread for Connect .....");
-	//connectTest(editLog_01,listLog_01);
 	connectTest(editLog_01,listLog_01);
-	
-	/*char buffer[64]={0},sb[32]={};
-	sprintf(buffer,"Record count 0%d",rs_count());
-	dlg->logONList(buffer);
 
-
-	HWND handle=GetDlgItem(dlg->m_hWnd, editRegName);
-	int len = SendMessage(handle, WM_GETTEXTLENGTH, 0, 0);
-
-    SendMessage(handle, WM_GETTEXT, (WPARAM)len+1, (LPARAM)sb);
-	sprintf(buffer, "Even Reg: %s",sb);
-	sprintf(dlg->reg_event_name,sb);
-	dlg->logONList(dlg->reg_event_name); //test log action event name
-	*/
 	update1(param);
 	dlg->logONList(dlg->reg_event_name);
 	//dlg->logONList("test treahd");
@@ -1106,7 +1138,7 @@ void CDemoDlg::updateControls(){
 	logList(listLog_01,buffer);
 	SetDlgItemText(editInfo,buffer);
 	EnableUpdate();
-	
+
 }
 
 void CDemoDlg::OnBnClickedbtnfirst()
@@ -1146,13 +1178,13 @@ void CDemoDlg::OnBnClickedbtnlast()
 
 /*
 int findPerson_id(int person_id){
-	
+
 }
 */
 void CDemoDlg::OnBnClickedbtnupdate()
 {
 	// TODO: Add your control notification handler code here
-	
+
 	//@todo, change...
 	int person_id=getPersonID();
 	int reqFPID=GetDlgItemInt(editFPID);
@@ -1164,7 +1196,7 @@ void CDemoDlg::OnBnClickedbtnupdate()
 	mysql_updateFinger(person_id,reqFPID,col_name);
 }
 /**
-	may be we can update finger print data on mysql
+may be we can update finger print data on mysql
 */
 void CDemoDlg::EnableUpdate(){
 	char buffer[20]={0};
@@ -1181,7 +1213,7 @@ void CDemoDlg::EnableUpdate(){
 		//todo set left no NONE
 		//ComboBox_GetCurSel(comboRight);
 		//info+=strlen(info);
-	
+
 		if(lcbr!=0){
 			this->FINGER_POSITION[0]=0;
 			sprintf(this->FINGER_POSITION,buffer);
@@ -1201,7 +1233,7 @@ void CDemoDlg::EnableUpdate(){
 		if(lcbl!=0){
 			this->FINGER_POSITION[0]=0;
 			sprintf(this->FINGER_POSITION,buffer);
-			
+
 			//recursive ?
 			//SendDlgItemMessage(comboLeft,CB_SETCURSEL,(WPARAM)0,(LPARAM)0);
 			//
@@ -1300,5 +1332,5 @@ void CDemoDlg::OnEnUpdateeditregname()
 
 	// TODO:  Add your control notification handler code here
 	update1(this);
-	
+
 }

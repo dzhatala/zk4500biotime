@@ -57,7 +57,7 @@ public class Main {
 
 			
 			Connection con=DriverManager.getConnection(  
-					"jdbc:mysql://"+host+":3306/moodle",user,password);  
+					"jdbc:mysql://"+host+":3306/absensi",user,password);  
 			//here sonoo is database name, root is username and password  
 			
 			password=null;//emptying password

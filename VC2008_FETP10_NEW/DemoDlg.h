@@ -132,6 +132,7 @@ public:
 	}*/
 	void backupFPImageThr();
 	afx_msg void OnEnUpdateeditregname();
+	void CheckDownloadFolder();
 };
 
 //{{AFX_INSERT_LOCATION}}
