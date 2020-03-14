@@ -31,11 +31,11 @@ string password = "xxxxxx"; //
 */
 #include "password.h" // not to be included if git .. ? missing in compilation 
 
-   sql::ResultSet  *resultSet=NULL;    // ResultSet to hold the results
-    sql::Driver     *driver; // MySQL Driver Object
-    sql::Connection *connection; // MySQL connection Object
-    sql::Statement  *statement;   // Statement which holds SQL commands
-   int CH_LOG_AFX_ID,CH_LOG_LIST_ID,rscount;
+sql::ResultSet  *resultSet=NULL;    // ResultSet to hold the results
+sql::Driver     *driver; // MySQL Driver Object
+sql::Connection *connection; // MySQL connection Object
+sql::Statement  *statement;   // Statement which holds SQL commands
+int CH_LOG_AFX_ID,CH_LOG_LIST_ID,rscount;
 
 void log(int editID,LPSTR msg){
 	HWND hwnd=GetActiveWindow();
@@ -48,58 +48,61 @@ void logList(int listID,LPCSTR msg){
 	LRESULT ret= SendDlgItemMessage(hwnd,listID,LB_ADDSTRING,0,(LPARAM)(msg));
 	_ASSERTE (ret!=LB_ERR);
 }
- int connectTest(int logAFXID,int listLogID){
+int connectTest(int logAFXID,int listLogID){
 
-    //Here is the connection
-    //cout << "Hello connect.cpp " ;
+	//Here is the connection
+	//cout << "Hello connect.cpp " ;
 	CH_LOG_AFX_ID=logAFXID;
 	CH_LOG_LIST_ID=listLogID;
 	try{
 
-	log(logAFXID,"Connecting mysql....");
-	logList(listLogID,"Connecting mysql....");
+		log(logAFXID,"Connecting mysql....");
+		logList(listLogID,"Connecting mysql....");
 
 
-        driver = get_driver_instance();
+		driver = get_driver_instance();
 
-        connection = driver->connect(server, username, password);
-        statement = connection->createStatement();
-        //statement->execute("USE moodle");
-        statement->execute("USE absensi");
-        resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id order by mdl_user.username");
+		LoadConfigFromTextFile(listLogID);
+		connection = driver->connect(server, username, password);
+		statement = connection->createStatement();
+		if(database=="moodle")
+			statement->execute("USE moodle");
+		if(database=="absensi")
+			statement->execute("USE absensi");
+		resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id order by mdl_user.username");
 		rscount = resultSet->rowsCount();
 		resultSet->first();
 		//resultSet->
-        /*while (resultSet->next()){
-            // Iterating the result set
-            //cout << resultSet->getString(1) << endl;
-			//CString cs = resultSet->getString(1);
-			//SetDlgItemText(GetActiveWindow(),logAFXID,(LPCSTR)resultSet->getString(1));
-        }*/
-    }
+		/*while (resultSet->next()){
+		// Iterating the result set
+		//cout << resultSet->getString(1) << endl;
+		//CString cs = resultSet->getString(1);
+		//SetDlgItemText(GetActiveWindow(),logAFXID,(LPCSTR)resultSet->getString(1));
+		}*/
+	}
 	catch (sql::SQLException &e){
 		SetDlgItemText(GetActiveWindow(),logAFXID,e.what());
 		MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
 
-       // cout << "Error message: " << e.what() << endl;
-        //system("pause");
-        return -1;
-    }
+		// cout << "Error message: " << e.what() << endl;
+		//system("pause");
+		return -1;
+	}
 
- 	
 
-    //system("pause");*/
-    return 0;
+
+	//system("pause");*/
+	return 0;
 }
 /***
-	return 0 on failed 
+return 0 on failed 
 */
 int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 
 	logList(CH_LOG_LIST_ID,"mysql_updateFinger");
 	if(connection){
 		/* find if exist, the update
-			otherwise add new on FPINFO table
+		otherwise add new on FPINFO table
 		*/
 
 		//if(resultSet->find
@@ -107,13 +110,13 @@ int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 			char sql[64]={0};
 
 			try{
-			
+
 				sprintf(sql,"select mdl_user.id from mdl_user where mdl_user.id=%d",person_id);
 				logList(CH_LOG_LIST_ID,sql);
-				
+
 				sql::ResultSet *restmp= statement->executeQuery(sql);
 				int rowc=restmp->rowsCount();
-				
+
 				delete restmp;
 				if(rowc<1){
 					logList(CH_LOG_LIST_ID,"cant find person id in db");
@@ -127,7 +130,7 @@ int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 				rowc=restmp->rowsCount();
 
 				delete restmp;
-				
+
 				if(rowc<1){
 					logList(CH_LOG_LIST_ID,"Not Existed yet, adding new ... ");
 					sql[0]=0;/*emptying string .... */
@@ -141,7 +144,7 @@ int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 					logList(CH_LOG_LIST_ID,"Existed, updating ....");
 
 					sql[0]=0;/*emptying string .... */
-					
+
 					sprintf(sql,"update FPINFO set  %s=%d where FPINFO.person_id=%d",finger_column,FPID, person_id);
 					logList(CH_LOG_LIST_ID,sql);
 					statement->executeUpdate(sql);
@@ -150,7 +153,7 @@ int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 
 			}catch (sql::SQLException &e){
 				SetDlgItemText(GetActiveWindow(),CH_LOG_AFX_ID,e.what());
-						MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
+				MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
 
 			}
 		}
@@ -159,10 +162,10 @@ int mysql_updateFinger(int person_id,int FPID,const char *finger_column){
 }
 
 void mysql_close(){
-   //Clear resources
+	//Clear resources
 	delete resultSet;
-    delete statement;
-    delete connection;
+	delete statement;
+	delete connection;
 
 }
 
@@ -236,27 +239,27 @@ void getPersonInfo( char* buffer){
 
 /** return a person_id for a finger FPID ***/
 int findPersonWithFPID(int FPID){
-	
+
 	if(resultSet){
-		
+
 		if(statement){
 			char sql[300]={0};
 
 			try{
-			sprintf(sql,
-				"select fpinfo.* from fpinfo WHERE LEFT_PINKY=%d OR LEFT_RING=%d OR LEFT_MIDDLE=%d OR LEFT_INDEX=%d OR LEFT_THUMB=%d OR RIGHT_THUMB=%d OR RIGHT_INDEX=%d OR RIGHT_MIDDLE=%d OR RIGHT_RING=%d OR RIGHT_PINKY=%d"
+				sprintf(sql,
+					"select fpinfo.* from fpinfo WHERE LEFT_PINKY=%d OR LEFT_RING=%d OR LEFT_MIDDLE=%d OR LEFT_INDEX=%d OR LEFT_THUMB=%d OR RIGHT_THUMB=%d OR RIGHT_INDEX=%d OR RIGHT_MIDDLE=%d OR RIGHT_RING=%d OR RIGHT_PINKY=%d"
 					,FPID,FPID,FPID,FPID,FPID,FPID,FPID,FPID,FPID,FPID);
-			
-			
-			/*sprintf(sql,
+
+
+				/*sprintf(sql,
 				"select fpinfo.* from fpinfo WHERE LEFT_PINKY=%d OR LEFT_THUMB=%d OR RIGHT_THUMB=%d "
-					,FPID,FPID,FPID);
-			*/
-			//logList(CH_LOG_LIST_ID,sql);
-				
+				,FPID,FPID,FPID);
+				*/
+				//logList(CH_LOG_LIST_ID,sql);
+
 				sql::ResultSet *restmp= statement->executeQuery(sql);
 				int rowc=restmp->rowsCount();
-				
+
 				if(rowc<1){
 					delete restmp;
 					logList(CH_LOG_LIST_ID,"cant find person id in db");
@@ -269,7 +272,7 @@ int findPersonWithFPID(int FPID){
 				return ret;
 			}catch (sql::SQLException &e){
 				SetDlgItemText(GetActiveWindow(),CH_LOG_AFX_ID,e.what());
-						MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
+				MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
 
 			}
 		}
@@ -279,12 +282,12 @@ int findPersonWithFPID(int FPID){
 }
 
 /***
-	move to person_id or move to last if not found
+move to person_id or move to last if not found
 ***/
 void MoveToPersonWithPersonID(int person_id){
 
-		//logList(CH_LOG_LIST_ID,"moving...");
-		
+	//logList(CH_LOG_LIST_ID,"moving...");
+
 
 	if(resultSet){
 		resultSet->first();
@@ -292,14 +295,14 @@ void MoveToPersonWithPersonID(int person_id){
 		while(true&&!resultSet->isLast()){
 
 			if(resultSet->getInt(PERSON_ID_COL_NUMBER)==person_id) {
-			//	logList(CH_LOG_LIST_ID,"move found ");
+				//	logList(CH_LOG_LIST_ID,"move found ");
 				return ;
 			}
 
 			if(resultSet->isLast()) {
 				return ;
 			}
-			
+
 			//logList(CH_LOG_LIST_ID,"moving...");
 			resultSet->next();
 		}
@@ -318,17 +321,83 @@ int mysql_logIdentified1N(int FPID,int SCORE, int PFN,const char* reg_name){
 	if(statement){
 		char  sql [200]={0};
 		sprintf(sql,"insert IDENTIFIED1N (FPID, SCORE,PFN,REGNAME) values (%d, %d,%d, '%s' ) ",
-						FPID,SCORE,PFN,reg_name);
+			FPID,SCORE,PFN,reg_name);
 		logList(CH_LOG_LIST_ID,sql);
 		try{
 			int ret=statement->executeUpdate(sql);
 			return ret;
 		}catch (sql::SQLException &e){
-				SetDlgItemText(GetActiveWindow(),CH_LOG_AFX_ID,e.what());
-						MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
+			SetDlgItemText(GetActiveWindow(),CH_LOG_AFX_ID,e.what());
+			MessageBox(GetActiveWindow(),e.what(),"Error",MB_OK);
 		}
 
 	}	
 	return -1;
 }
 
+#include <fstream>
+void LoadConfigFromTextFile(int listLogID){
+	char bfpath[1024],*cp;
+	char key[255],value[255];
+	GetCurrentDirectory(1023, bfpath );
+
+	sprintf(bfpath+strlen(bfpath),"\\password.txt");
+	cp=bfpath+55;
+	logList(CH_LOG_LIST_ID,cp);
+	ifstream in(bfpath);
+
+	if(!in) {
+		MessageBox(GetActiveWindow(),"Cannot open password.txt","Cannot open password.txt",MB_OK);
+
+	}
+
+
+	while(in) {
+		in.getline(bfpath, 1023);  // delim defaults to '\n'
+		logList(CH_LOG_LIST_ID,bfpath);
+		sscanf(bfpath,"%s %s",key,value);
+		//MessageBox(GetActiveWindow(),key,value,MB_OK);
+		if(strlen(bfpath)>3){ // need at_least 3 char ?
+			//MessageBox(GetActiveWindow(),bfpath,value,MB_OK);
+			if (strcmp(key,"server")==0){
+				server.clear();
+				//server="test";
+				//string new_server("host_constructor");
+				string new_server(value);
+				server.replace(0,new_server.length(),new_server);
+			}
+
+			if (strcmp(key,"username")==0){
+				username.clear();
+				//server="test";
+				//string new_server("host_constructor");
+				string new_str(value);
+				username.replace(0,new_str.length(),new_str);
+			}
+			if (strcmp(key,"password")==0){
+				//MessageBox(GetActiveWindow(),key,value,MB_OK);
+				password.clear();
+				//server="test";
+				//string new_server("host_constructor");
+				string new_str(value);
+				password.replace(0,new_str.length(),new_str);
+			}
+
+			if (strcmp(key,"database")==0){
+				password.clear();
+				//server="test";
+				//string new_server("host_constructor");
+				string new_str(value);
+				database.replace(0,new_str.length(),new_str);
+			}
+
+
+
+		}
+	}
+
+	in.close();
+
+
+
+}

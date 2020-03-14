@@ -4,7 +4,6 @@
 #include "Demo.h"
 #include "DemoDlg.h"
 #include "Connect.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -1334,3 +1333,4 @@ void CDemoDlg::OnEnUpdateeditregname()
 	update1(this);
 
 }
+
