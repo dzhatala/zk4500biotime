@@ -80,7 +80,7 @@ public class MainWin {
 				int id1nID=rs.getInt(1);
 				int FPID = rs.getInt(3);
 				Date trialDate=rs.getDate(2);
-				String fName=rs.getString(8); String lName=rs.getString(9);
+				String fName=rs.getString(9); String lName=rs.getString(10);
 				//System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
 
 				if(id1nID>last1Nid){
@@ -283,7 +283,7 @@ public class MainWin {
 						//p=Runtime.getRuntime().exec(args);
 						//p.waitFor();
 						//p=Runtime.getRuntime().exec("vlcwin.bat  espeak.wav");
-						p=Runtime.getRuntime().exec("espeak "+ffName);
+						p=Runtime.getRuntime().exec("espeak -v id \""+ffName+"\"" );
 						p.waitFor();
 					}
 					
@@ -296,7 +296,7 @@ public class MainWin {
 							p=Runtime.getRuntime().exec(args);
 							p.waitFor();
 							p=Runtime.getRuntime().exec("vlcwin.bat espeak.wav");*/
-							p=Runtime.getRuntime().exec("espeak "+flName);
+							p=Runtime.getRuntime().exec("espeak -v id \""+flName+"\"" );
 							p.waitFor();
 						}
 					

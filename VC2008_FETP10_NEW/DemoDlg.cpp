@@ -240,8 +240,8 @@ void CDemoDlg::OnBTNInit()
 					logONList("missing");
 					logONList(buf_FN);
 				}else {
-					logONList(buf_FN);
-
+					//logONList(buf_FN);
+					;
 				}
 				if(missingCount>3){
 					info[0]=0;
