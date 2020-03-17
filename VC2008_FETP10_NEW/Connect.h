@@ -24,6 +24,6 @@ int mysql_updateFinger(int person_id,int FPID,const char *finger);
 int findPersonWithFPID(int FPID);
 void MoveToPersonWithPersonID(int FPID);
 int mysql_logIdentified1N(int FPID,int SCORE, int PFN, const char *reg_name);
-	void LoadConfigFromTextFile(int listLogID);
+void LoadConfigFromTextFile(int listLogID);
 
 #endif

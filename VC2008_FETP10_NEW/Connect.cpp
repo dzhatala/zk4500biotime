@@ -1,6 +1,7 @@
 // Standard includes
 #include "stdafx.h"
 #include "Connect.h"
+#include <fstream>
 //#include 
 //#include 
 using namespace std;
@@ -58,17 +59,23 @@ int connectTest(int logAFXID,int listLogID){
 
 		log(logAFXID,"Connecting mysql....");
 		logList(listLogID,"Connecting mysql....");
+		//MessageBox(GetActiveWindow(),"Connect mysql","in connectTest()",MB_OK);
 
 
 		driver = get_driver_instance();
 
 		LoadConfigFromTextFile(listLogID);
+		//MessageBox(GetActiveWindow(),password.c_str(),"in connectTest() password",MB_OK);
+
 		connection = driver->connect(server, username, password);
 		statement = connection->createStatement();
-		if(database=="moodle")
+		/*if(database=="moodle")
 			statement->execute("USE moodle");
 		if(database=="absensi")
-			statement->execute("USE absensi");
+			statement->execute("USE absensi");*/
+		char bufsql[255];
+		sprintf(bufsql,"USE %s",database.c_str());
+		statement->execute("USE "+database);
 		resultSet = statement->executeQuery("select fpinfo.* ,mdl_user.username ,mdl_user.firstname,mdl_user.middlename,mdl_user.lastname,mdl_user.id from fpinfo right join mdl_user on fpinfo.person_id=mdl_user.id order by mdl_user.username");
 		rscount = resultSet->rowsCount();
 		resultSet->first();
@@ -335,7 +342,6 @@ int mysql_logIdentified1N(int FPID,int SCORE, int PFN,const char* reg_name){
 	return -1;
 }
 
-#include <fstream>
 void LoadConfigFromTextFile(int listLogID){
 	char bfpath[1024],*cp;
 	char key[255],value[255];
@@ -354,12 +360,13 @@ void LoadConfigFromTextFile(int listLogID){
 
 	while(in) {
 		in.getline(bfpath, 1023);  // delim defaults to '\n'
+		//MessageBox(GetActiveWindow(),bfpath,bfpath,MB_OK);
 		logList(CH_LOG_LIST_ID,bfpath);
 		sscanf(bfpath,"%s %s",key,value);
-		//MessageBox(GetActiveWindow(),key,value,MB_OK);
 		if(strlen(bfpath)>3){ // need at_least 3 char ?
 			//MessageBox(GetActiveWindow(),bfpath,value,MB_OK);
 			if (strcmp(key,"server")==0){
+				MessageBox(GetActiveWindow(),value,"server",MB_OK);
 				server.clear();
 				//server="test";
 				//string new_server("host_constructor");
@@ -368,6 +375,7 @@ void LoadConfigFromTextFile(int listLogID){
 			}
 
 			if (strcmp(key,"username")==0){
+				MessageBox(GetActiveWindow(),value,"username",MB_OK);
 				username.clear();
 				//server="test";
 				//string new_server("host_constructor");
@@ -375,20 +383,21 @@ void LoadConfigFromTextFile(int listLogID){
 				username.replace(0,new_str.length(),new_str);
 			}
 			if (strcmp(key,"password")==0){
-				//MessageBox(GetActiveWindow(),key,value,MB_OK);
+				//MessageBox(GetActiveWindow(),value,"password",MB_OK);
 				password.clear();
-				//server="test";
-				//string new_server("host_constructor");
-				string new_str(value);
-				password.replace(0,new_str.length(),new_str);
+				string new_ps(value);
+				password.replace(0,new_ps.length(),new_ps);
+				//MessageBox(GetActiveWindow(),password.c_str(),"inLoadConfig #1",MB_OK);
+				//MessageBox(GetActiveWindow(),password.c_str(),"inLoadConfig #3",MB_OK);
 			}
 
 			if (strcmp(key,"database")==0){
-				password.clear();
+				MessageBox(GetActiveWindow(),value,"database",MB_OK);
+				database.clear();
 				//server="test";
 				//string new_server("host_constructor");
-				string new_str(value);
-				database.replace(0,new_str.length(),new_str);
+				string new_db(value);
+				database.replace(0,new_db.length(),new_db);
 			}
 
 
@@ -396,6 +405,7 @@ void LoadConfigFromTextFile(int listLogID){
 		}
 	}
 
+	//MessageBox(GetActiveWindow(),password.c_str(),"inLoadConfig #9",MB_OK);
 	in.close();
 
 

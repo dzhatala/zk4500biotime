@@ -1,5 +1,6 @@
 // DemoDlg.cpp : implementation file
 //
+#include "password.h"
 #include "stdafx.h"
 #include "Demo.h"
 #include "DemoDlg.h"
@@ -1109,6 +1110,7 @@ void pr1(void *param){
 	CDemoDlg *dlg=(CDemoDlg*)param;
 	if(dlg==NULL)return ;
 	dlg->logONList("New Thread for Connect .....");
+	//LoadConfigFromTextFile(listLog_01);
 	connectTest(editLog_01,listLog_01);
 
 	update1(param);
@@ -1126,6 +1128,7 @@ void CDemoDlg::OnBnClickedbtnconnectmysql()
 	logList(listLog_01,buffer);
 	OnBnClickedbtnfirst();*/
 	//_beginthread(CDemoDlg::ThreadedOnBnClickedbtnconnectmysql,0,NULL);
+	//LoadConfigFromTextFile(listLog_01);
 	_beginthread(pr1,0,this);
 }
 

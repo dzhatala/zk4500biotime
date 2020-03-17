@@ -57,7 +57,7 @@ public class Main {
 
 			
 			Connection con=DriverManager.getConnection(  
-					"jdbc:mysql://"+host+":3306/absensi",user,password);  
+					"jdbc:mysql://"+host+":3306/moodle",user,password);  
 			//here sonoo is database name, root is username and password  
 			
 			password=null;//emptying password
@@ -87,7 +87,8 @@ public class Main {
 						if(FPID!=-1){
 							logUser(id1nID, FPID, trialDate, fName, lName);
 							if(fName!=null&&lName!=null)
-								speakIdentifed1N(FPID,fName, lName);
+								//speakIdentifed1N(FPID,fName, lName);
+								speakIdentifed1N_espeak(FPID,fName, lName);
 							if(fName==null&&lName==null){
 
 								speakNotInDB(FPID);
@@ -124,13 +125,19 @@ public class Main {
 
 
 	}
-	private static void speakNotRegistered() {
+	 static void speakNotRegistered() {
 		System.out.println("speakNotRegistered ...");
 		Thread runner =new Thread(){
 
 			public void run(){
 				try {
 					Process p=Runtime.getRuntime().exec("/usr/bin/play notregistered.wav");
+					p.waitFor();
+					//Thread.currentThread();
+					//Thread.sleep(1000);
+					p=Runtime.getRuntime().exec("/usr/bin/play -v 3.0 tdk_terdaftar.wav");
+					p.waitFor();
+					p=Runtime.getRuntime().exec("/usr/bin/play -v 3.0 silahkan_ulangi.wav");
 					p.waitFor();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -146,14 +153,32 @@ public class Main {
 
 		
 	}
-	private static void speakNotInDB(int fPID) {
+	 static void speakNotInDB(final int FPID) {
 		// TODO Auto-generated method stub
 		System.out.println("speakNotInDB ...");
 		Thread runner =new Thread(){
 
 			public void run(){
 				try {
+					
 					Process p=Runtime.getRuntime().exec("/usr/bin/play notindb.wav");
+					p.waitFor();
+					
+					/*if(true==true){
+						String []args=new String[8];
+						
+						args[0]="/usr/bin/espeak";args[1]="-p"; args[2]="60";args[3]= "-v";args[4]="mb-id1"; args[5]="-w";
+						args[6]="fpid.wav";
+						args[7]="'Jari,. Jari,. nomor. "+FPID+"'" ;
+								
+						p=Runtime.getRuntime().exec(args);
+						p.waitFor();
+						p=Runtime.getRuntime().exec("/usr/bin/play -v 4.0 fpid.wav");
+						p.waitFor();
+					}*/
+					p=Runtime.getRuntime().exec("/usr/bin/play -v 4.0 tdk_basis_data.wav");
+					p.waitFor();
+					p=Runtime.getRuntime().exec("/usr/bin/play -v 4.0 silahkan_ulangi.wav");
 					p.waitFor();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -222,5 +247,65 @@ public class Main {
 		runner.start();
 
 	}
+	
+	
+	/** Thread safe **/
+	
+	public static void speakIdentifed1N_espeak(int ffPID, final String ffName, final String flName) {
+		// TODO Auto-generated method stub
+		System.out.println("speakIdentifed1N ...");
+		Thread runner =new Thread(){
 
+			public void run(){
+				try {
+					Process p=null;
+					String []args=null;
+					p=Runtime.getRuntime().exec("/usr/bin/play  verified.wav");
+					p.waitFor();
+					//Thread.currentThread();
+					//Thread.sleep(500);
+
+					if(ffName!=null){
+						args=new String[8];
+						
+						args[0]="/usr/bin/espeak";args[1]="-p"; args[2]="50";args[3]= "-v";args[4]="mb-id1"; args[5]="-w";
+						args[6]="espeak.wav";
+						args[7]=ffName;
+								
+						p=Runtime.getRuntime().exec(args);
+						p.waitFor();
+						p=Runtime.getRuntime().exec("/usr/bin/play -v 4.0 espeak.wav");
+						p.waitFor();
+					}
+					
+					if(flName!=null){
+							args=new String[8];
+							
+							args[0]="/usr/bin/espeak";args[1]="-p"; args[2]="50";args[3]= "-v";args[4]="mb-id1"; args[5]="-w";
+							args[6]="espeak.wav";
+							args[7]=flName;
+							p=Runtime.getRuntime().exec(args);
+							p.waitFor();
+							p=Runtime.getRuntime().exec("/usr/bin/play -v 4.0 espeak.wav");
+							p.waitFor();
+						}
+					
+					
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
+				}
+			}
+		};
+		runner.start();
+
+	}
+
+
+	
 }
