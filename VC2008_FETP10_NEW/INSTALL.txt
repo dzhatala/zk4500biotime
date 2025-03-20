@@ -1,0 +1,9 @@
+Fri Mar 21 02:32:30 WIT 2025
+INSTALL.txt
+zkteco
+	cp Release/*
+	cp Release/downloaded
+	cp Release/master
+mysql (db)
+	install absensi.sql (git repo: moodle_https/sqls)
+	

@@ -5,6 +5,7 @@
 #include "Demo.h"
 #include "DemoDlg.h"
 #include "Connect.h"
+#include "windows.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -296,7 +297,7 @@ void CDemoDlg::OnOnImageReceivedZkfpengx2(BOOL FAR* AImageValid)
 	HDC hdc;
 
 	hdc = this->GetDC()->m_hDC;
-
+	OnBnClickedBtnbeep();
 	zkfpEng.PrintImageAt(long(hdc), 400, 2, zkfpEng.get_ImageWidth(), zkfpEng.get_ImageHeight());
 }
 
@@ -780,18 +781,27 @@ If AValue=1, lights on, if it¡¯s 0, lights off.
 void CDemoDlg::OnBnClickedBtnred()
 {
 	zkfpEng.ControlSensor(12, 1);
+	Sleep(1);
+	zkfpEng.ControlSensor(12, 0);
+	Sleep(1);
+	zkfpEng.ControlSensor(12, 1);
+	Sleep(1);
 	zkfpEng.ControlSensor(12, 0);
 }
 
 void CDemoDlg::OnBnClickedBtngreen()
 {
 	zkfpEng.ControlSensor(11, 1);
+	Sleep(2);
+	
 	zkfpEng.ControlSensor(11, 0);
 }
 
 void CDemoDlg::OnBnClickedBtnbeep()
 {
 	zkfpEng.ControlSensor(13, 1);
+	//delayhere
+	Sleep(1);
 	zkfpEng.ControlSensor(13, 0);
 }
 

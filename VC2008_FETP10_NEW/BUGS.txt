@@ -1,0 +1,1 @@
+0. application close if no row in mdl_user (connect_mysql button)
